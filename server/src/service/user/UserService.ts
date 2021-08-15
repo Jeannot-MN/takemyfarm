@@ -1,7 +1,7 @@
 import { User } from "src/domain/entities/User";
-import { UserRepository } from "../../domain/repositories/UserRepository";
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
+import { UserRepository } from "../../domain/repositories/UserRepository";
 
 @Service()
 export class UserService {
@@ -14,6 +14,10 @@ export class UserService {
 
     public findAll(): Promise<User[]> {
         return this.userRepository.findAll();
+    }
+
+    public findByEmail(email: string): Promise<User | undefined> {
+        return this.userRepository.findByEmail(email);
     }
 
     public save(user: User): Promise<User> {

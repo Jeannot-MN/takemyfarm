@@ -4,7 +4,7 @@ import { RegisterUserInput } from "../../../graphql/types/user/RegisterUserInput
 import { UserService } from "../../../service/user/UserService";
 import { PasswordEnconderService } from "../../../service/utils/PasswordEnconderService";
 import { UserMapper } from "../../mappers/UserMapper";
-import { UserDTO } from "../../types/user/UserDTO";
+import { RegisterUserPayload } from "../../types/user/RegisterUserPayload";
 
 @Resolver()
 export class UserMutationResolver {
@@ -13,13 +13,13 @@ export class UserMutationResolver {
     private userMapper: UserMapper;
     private passwordEnconderService: PasswordEnconderService;
 
-    constructor(){
+    constructor() {
         this.userService = Container.get(UserService);
         this.userMapper = Container.get(UserMapper);
         this.passwordEnconderService = Container.get(PasswordEnconderService);
     }
 
-    @Mutation(() => UserDTO)
+    @Mutation(() => RegisterUserPayload)
     async registerUser(@Arg("input") input: RegisterUserInput) {
         const user = this.userMapper.registerUserInputToUser(input);
 
@@ -27,6 +27,6 @@ export class UserMutationResolver {
         user.setPassword(hashedPassword);
 
         await this.userService.save(user);
-        return user;
+        return new RegisterUserPayload(this.userMapper.userToUserDTO(user));
     }
 }
