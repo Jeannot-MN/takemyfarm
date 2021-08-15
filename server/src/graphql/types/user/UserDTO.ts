@@ -1,26 +1,22 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
 
-@Entity("users")
-@Unique(["email"])
-export class User {
+@ObjectType()
+export class UserDTO {
 
-    @PrimaryGeneratedColumn()
+    @Field()
     private id: number;
 
-    @Column()
+    @Field()
     private name: string;
 
-    @Column()
+    @Field({nullable : true})
     private surname: string;
 
-    @Column()
+    @Field({nullable : true})
     private email: string;
 
-    @Column()
+    @Field({nullable : true})
     private mobileNumber: string;
-
-    @Column()
-    private password: string;
 
     public getId(): number {
         return this.id;
@@ -60,13 +56,5 @@ export class User {
 
     public setMobileNumber(mobileNumber: string): void {
         this.mobileNumber = mobileNumber;
-    }
-
-    public getPassword(): string {
-        return this.password;
-    }
-
-    public setPassword(password: string): void {
-        this.password = password;
     }
 }

@@ -10,6 +10,7 @@ import { HelloWorldResolver } from "./graphql/resolvers/HelloWorldResolver";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { Container } from "typeorm-typedi-extensions";
 import { UserMutationResolver } from "./graphql/resolvers/user/UserMutationResolver";
+import { UserQueryResolver } from "./graphql/resolvers/user/UserQueryResolver";
 
 const startServer = async () => {
     //Setup DI container
@@ -29,7 +30,7 @@ const startServer = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloWorldResolver, UserMutationResolver],
+            resolvers: [HelloWorldResolver, UserMutationResolver, UserQueryResolver],
             validate: false
         }),
         plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})]
