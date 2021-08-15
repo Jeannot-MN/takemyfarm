@@ -18,8 +18,15 @@ const startServer = async () => {
 
     const app = express();
 
+    app.get('', (_, res) =>{
+        res.send({
+            value: 100
+        });
+    })
+
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
+            //@ts-ignore
             resolvers: [
                 ...UserResolvers, ...AuthResolvers
             ],
@@ -31,8 +38,10 @@ const startServer = async () => {
     await apolloServer.start();
     apolloServer.applyMiddleware({ app });
 
-    app.listen(8080, () => {
-        console.log("The server is listening on port 8080");
+    const port = process.env.PORT || 8080;
+
+    app.listen(port, () => {
+        console.log("The server started.");
 
     })
 }
