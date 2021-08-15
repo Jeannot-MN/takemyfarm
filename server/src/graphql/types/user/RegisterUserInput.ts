@@ -1,29 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Field, InputType } from "type-graphql";
 
-@Entity("users")
-export class User {
 
-    @PrimaryGeneratedColumn()
-    private id: number;
-
-    @Column()
+@InputType()
+export class RegisterUserInput {
+    
+    @Field()
     private name: string;
 
+    @Field()
     private surname: string;
 
+    @Field()
     private email: string;
 
+    @Field()
     private mobileNumber: string;
 
+    @Field()
     private password: string;
-
-    public getId(): number {
-        return this.id;
-    }
-
-    public setId(id: number): void {
-        this.id = id;
-    }
 
     public getName(): string {
         return this.name;
@@ -64,4 +58,5 @@ export class User {
     public setPassword(password: string): void {
         this.password = password;
     }
+
 }

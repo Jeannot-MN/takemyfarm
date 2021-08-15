@@ -1,4 +1,4 @@
-import { createConnection } from "typeorm";
+import { createConnection, useContainer } from "typeorm";
 import "reflect-metadata";
 import dataSourceConfiguration from './db/config/DatasourceConfiguration';
 import { User } from "./domain/entities/User";
@@ -8,8 +8,13 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { HelloWorldResolver } from "./graphql/resolvers/HelloWorldResolver";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { Container } from "typeorm-typedi-extensions";
+import { UserMutationResolver } from "./graphql/resolvers/user/UserMutationResolver";
 
 const startServer = async () => {
+    //Setup DI container
+    useContainer(Container);
+
     // Database connection
     await createConnection(dataSourceConfiguration);
 
@@ -24,7 +29,7 @@ const startServer = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloWorldResolver],
+            resolvers: [HelloWorldResolver, UserMutationResolver],
             validate: false
         }),
         plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})]
