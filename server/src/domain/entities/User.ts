@@ -3,6 +3,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity("users")
 export class User {
 
+    constructor(name: string){
+        this.name = name;
+    }
+
     @PrimaryGeneratedColumn()
     private id: number;
 
