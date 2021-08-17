@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Role } from "./Role";
 
 @Entity("users")
 @Unique(["email"])
@@ -21,6 +22,29 @@ export class User {
 
     @Column()
     private password: string;
+
+    @ManyToMany(() => Role, { eager: true })
+    @JoinTable({
+        name: "user_role",
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'roleName',
+            referencedColumnName: 'name',
+        }
+    })
+    roles: Role[];
+
+    public getRoles(): Role[] {
+        return this.roles;
+    }
+
+    public setRoles(roles: Role[]): void {
+        this.roles = roles;
+    }
+
 
     public getId(): number {
         return this.id;

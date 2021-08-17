@@ -1,5 +1,5 @@
 import { Query, Resolver } from "type-graphql";
-import Container from "typedi";
+import { Container } from "typeorm-typedi-extensions";
 import { UserService } from "../../../service/user/UserService";
 import { UserDTO } from "../../types/user/UserDTO";
 
