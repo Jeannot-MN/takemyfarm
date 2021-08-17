@@ -22,13 +22,13 @@ const startServer = async () => {
         res.send({
             value: 100
         });
-    })
+    });
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            //@ts-ignore
             resolvers: [
-                ...UserResolvers, ...AuthResolvers
+                ...UserResolvers, 
+                ...AuthResolvers
             ],
             validate: false
         }),

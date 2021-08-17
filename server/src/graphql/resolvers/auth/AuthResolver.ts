@@ -33,4 +33,4 @@ class AuthResolver {
     }
 }
 
-export const AuthResolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [AuthResolver];
+export const AuthResolvers: NonEmptyArray<Function> = [AuthResolver];
