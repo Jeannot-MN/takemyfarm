@@ -1,7 +1,6 @@
 import { Request } from "express";
 import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
-import { User } from "../../domain/entities/User";
 import { UserService } from "../../service/user/UserService";
 import { JWTService } from "../../service/utils/JWTService";
 import { GraphqlContext } from "./GraphqlContext";
@@ -17,12 +16,17 @@ export class GraphqlContextBuilder {
         this.jwtService = Container.get(JWTService);
     }
 
-    public getA(): string {return "Hello"}
+    public async build(httpRequest: Request): Promise<GraphqlContext> {
+        const authHeader = httpRequest.headers.authorization;
+        if (authHeader === '' || authHeader === null || authHeader === undefined) {
+            return new GraphqlContext(httpRequest, null);
+        } else {
+            const token = authHeader.split("Bearer ")[1];
 
-    public build(httpRequest: Request): GraphqlContext {
-        
-        console.log(httpRequest.headers);
-        
-        return new GraphqlContext(httpRequest, new User());
+            const userEmail = this.jwtService.decodeToken(token);
+            const user = await this.userService.findByEmail(userEmail);
+
+            return new GraphqlContext(httpRequest, user || null);
+        }
     }
 }

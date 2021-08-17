@@ -1,3 +1,4 @@
+import { assert } from "chai";
 import { Arg, Ctx, Mutation, NonEmptyArray, Resolver } from "type-graphql";
 import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
@@ -24,6 +25,9 @@ class AuthResolver {
 
     @Mutation(() => LoginPayload)
     async login(@Arg("input") input: LoginInput, @Ctx() context: GraphqlContext) {
+        // assert.isTrue(context.isAuthenticated());
+        console.log(context);
+        
         const user = await this.userService.findByEmail(input.getEmail());
         
         if(user){

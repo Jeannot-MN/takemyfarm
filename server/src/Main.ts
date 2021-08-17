@@ -4,7 +4,6 @@ import express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { Service } from "typedi";
-import { useContainer } from "typeorm";
 import { Container } from "typeorm-typedi-extensions";
 import { GraphqlContextBuilder } from "./graphql/context/GraphqlContextBuilder";
 import { AuthResolvers } from "./graphql/resolvers/auth/AuthResolver";
@@ -20,7 +19,7 @@ export class Main {
     }
 
     public startServer = async () => {
-        
+
         const app = express();
 
         app.get('', (_, res) => {
@@ -38,7 +37,7 @@ export class Main {
                 validate: false
             }),
             plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
-            context: ({ req }) => ({ context: this.graphqlContextBuilder.build(req) })
+            context: async ({ req }) => ({ context: await this.graphqlContextBuilder.build(req) })
         });
 
         await apolloServer.start();

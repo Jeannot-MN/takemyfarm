@@ -6,7 +6,7 @@ export class GraphqlContext {
 
     constructor(
         request: Request,
-        user: User,
+        user: User | null,
     ){
         this.request = request;
         this.user = user;
@@ -14,7 +14,7 @@ export class GraphqlContext {
     
     private request: Request;
 
-    private user: User;
+    private user: User | null;
 
     public getRequest(): Request {
         return this.request;
@@ -24,7 +24,7 @@ export class GraphqlContext {
         this.request = request;
     }
 
-    public getUser(): User {
+    public getUser(): User | null {
         return this.user;
     }
 
