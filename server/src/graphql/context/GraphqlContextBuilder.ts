@@ -18,15 +18,15 @@ export class GraphqlContextBuilder {
 
     public async build(httpRequest: Request): Promise<GraphqlContext> {
         const authHeader = httpRequest.headers.authorization;
-        if (authHeader === '' || authHeader === null || authHeader === undefined) {
-            return new GraphqlContext(httpRequest, null);
-        } else {
+        if (authHeader) {
             const token = authHeader.split("Bearer ")[1];
 
             const userEmail = this.jwtService.decodeToken(token);
             const user = await this.userService.findByEmail(userEmail);
 
             return new GraphqlContext(httpRequest, user || null);
+        } else {
+            return new GraphqlContext(httpRequest, null);
         }
     }
 }
