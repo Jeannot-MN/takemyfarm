@@ -1,4 +1,3 @@
-import { assert } from "chai";
 import { Arg, Ctx, Mutation, NonEmptyArray, Resolver } from "type-graphql";
 import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
@@ -27,18 +26,18 @@ class AuthResolver {
     async login(@Arg("input") input: LoginInput, @Ctx() context: GraphqlContext) {
         // assert.isTrue(context.isAuthenticated());
         console.log(context);
-        
+
         const user = await this.userService.findByEmail(input.getEmail());
-        
-        if(user){
-            const valid  = await this.passwordEnconderService.match(input.getPassword(), user.getPassword());
-            if(valid){
+
+        if (user) {
+            const valid = await this.passwordEnconderService.match(input.getPassword(), user.getPassword());
+            if (valid) {
                 const token = this.jwtService.generateToken(user);
-                return new LoginPayload(user.getEmail(),token);
+                return new LoginPayload(user.getEmail(), token);
             } else {
                 throw new Error("Invalid credentials.");
             }
-        } else{
+        } else {
             throw new Error("Invalid credentials.");
         }
     }
