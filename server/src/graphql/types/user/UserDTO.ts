@@ -17,4 +17,7 @@ export class UserDTO {
 
     @Field({ nullable: true })
     mobileNumber: string;
+
+    @Field({ nullable: true })
+    profileImageUri: string;
 }

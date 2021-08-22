@@ -23,8 +23,8 @@ export class UserMutationResolver {
     async registerUser(@Arg("input") input: RegisterUserInput) {
         const user = this.userMapper.registerUserInputToUser(input);
 
-        const hashedPassword = await this.passwordEnconderService.encode(input.getPassword());
-        user.setPassword(hashedPassword);
+        const hashedPassword = await this.passwordEnconderService.encode(input.password);
+        user.password = hashedPassword;
 
         await this.userService.save(user);
         return new RegisterUserPayload(this.userMapper.userToUserDTO(user));

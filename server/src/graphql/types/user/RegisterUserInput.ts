@@ -18,4 +18,7 @@ export class RegisterUserInput {
 
     @Field()
     password: string;
+
+    @Field({nullable : true})
+    profileImageUri: string;
 }

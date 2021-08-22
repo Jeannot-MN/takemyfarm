@@ -12,6 +12,7 @@ export class UserMapper {
         target.surname = source.surname;
         target.email = source.email;
         target.mobileNumber = source.mobileNumber;
+        target.profileImageUri = source.profileImageUri;
 
         return target;
     }
@@ -23,6 +24,7 @@ export class UserMapper {
         target.surname = source.surname;
         target.email = source.email;
         target.mobileNumber = source.mobileNumber;
+        target.profileImageUri = source.profileImageUri;
 
         return target;
     }

@@ -23,6 +23,9 @@ export class User {
     @Column()
     password: string;
 
+    @Column({nullable: true})
+    profileImageUri: string;
+
     @ManyToMany(() => Role, { eager: true })
     @JoinTable({
         name: "user_role",
