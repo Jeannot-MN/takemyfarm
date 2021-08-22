@@ -24,16 +24,13 @@ class AuthResolver {
 
     @Mutation(() => LoginPayload)
     async login(@Arg("input") input: LoginInput, @Ctx() context: GraphqlContext) {
-        // assert.isTrue(context.isAuthenticated());
-        console.log(context);
-
-        const user = await this.userService.findByEmail(input.getEmail());
+        const user = await this.userService.findByEmail(input.email);
 
         if (user) {
-            const valid = await this.passwordEnconderService.match(input.getPassword(), user.getPassword());
+            const valid = await this.passwordEnconderService.match(input.password, user.password);
             if (valid) {
                 const token = this.jwtService.generateToken(user);
-                return new LoginPayload(user.getEmail(), token);
+                return new LoginPayload(user.email, token);
             } else {
                 throw new Error("Invalid credentials.");
             }

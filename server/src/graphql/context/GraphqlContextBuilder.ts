@@ -24,9 +24,17 @@ export class GraphqlContextBuilder {
             const userEmail = this.jwtService.decodeToken(token);
             const user = await this.userService.findByEmail(userEmail);
 
-            return new GraphqlContext(httpRequest, user || null);
+            // user?.getRoles().forEach(role => console.log(role.getName()));
+
+            return {
+                request: httpRequest,
+                user: user ? user : null
+            };
         } else {
-            return new GraphqlContext(httpRequest, null);
+            return {
+                request: httpRequest,
+                user: null
+            };
         }
     }
 }

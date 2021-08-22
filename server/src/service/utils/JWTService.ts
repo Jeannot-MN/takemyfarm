@@ -8,11 +8,11 @@ export class JWTService {
     public generateToken(user: User): string {
         try {
             const tokenData: TokenDataProp = {
-                email: user.getEmail(),
-                roles: user.getRoles().map(role => {
+                email: user.email,
+                roles: user.roles.map(role => {
                     return {
-                        name: role.getName(),
-                        description: role.getDescription(),
+                        name: role.name,
+                        description: role.description,
                     }
                 })
             }
@@ -26,7 +26,7 @@ export class JWTService {
 
             return token;
         } catch (e) {
-            console.log(e.getMessage());
+            console.log(e.message);
             throw new Error("System cannot complete your request. Failed to generate a token.");
         }
     }
@@ -37,7 +37,7 @@ export class JWTService {
             //@ts-ignore
             return data.email;
         } catch (e) {
-            console.log(e.getMessage());
+            console.log(e.message);
             throw new Error("System cannot complete your request. Token verification failed.");
         }
     }

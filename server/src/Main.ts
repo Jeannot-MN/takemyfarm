@@ -5,6 +5,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
+import { GraphqlContext } from "./graphql/context/GraphqlContext";
 import { GraphqlContextBuilder } from "./graphql/context/GraphqlContextBuilder";
 import { AuthResolvers } from "./graphql/resolvers/auth/AuthResolver";
 import { UserResolvers } from "./graphql/resolvers/user/UserResolver";
@@ -37,7 +38,10 @@ export class Main {
                 validate: false
             }),
             plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
-            context: async ({ req }) => ({ context: await this.graphqlContextBuilder.build(req) })
+            context: async ({ req }) => {
+                const context: GraphqlContext = await this.graphqlContextBuilder.build(req);
+                return context;
+            }
         });
 
         await apolloServer.start();

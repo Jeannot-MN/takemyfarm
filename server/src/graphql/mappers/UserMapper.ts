@@ -8,21 +8,21 @@ export class UserMapper {
 
     public registerUserInputToUser(source: RegisterUserInput): User {
         const target = new User();
-        target.setName(source.getName());
-        target.setSurname(source.getSurname())
-        target.setEmail(source.getEmail());
-        target.setMobileNumber(source.getMobileNumber());
+        target.name = source.name;
+        target.surname = source.surname;
+        target.email = source.email;
+        target.mobileNumber = source.mobileNumber;
 
         return target;
     }
 
     public userToUserDTO(source: User): UserDTO {
         const target = new UserDTO();
-        target.setId(source.getId());
-        target.setName(source.getName());
-        target.setSurname(source.getSurname());
-        target.setEmail(source.getEmail());
-        target.setMobileNumber(source.getMobileNumber())
+        target.id = source.id;
+        target.name = source.name;
+        target.surname = source.surname;
+        target.email = source.email;
+        target.mobileNumber = source.mobileNumber;
 
         return target;
     }

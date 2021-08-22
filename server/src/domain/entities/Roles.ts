@@ -1,4 +1,4 @@
 export enum Roles {
-    SYSADMIN,
-    SELLER
+    SYSADMIN = "ADMIN",
+    SELLER = "SELLER"
 }
