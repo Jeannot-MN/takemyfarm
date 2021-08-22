@@ -1,10 +1,9 @@
-import { Arg, Ctx, Mutation, NonEmptyArray, Resolver } from "type-graphql";
+import { Arg, Mutation, NonEmptyArray, Resolver } from "type-graphql";
 import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
 import { UserService } from "../../../service/user/UserService";
 import { JWTService } from "../../../service/utils/JWTService";
 import { PasswordEnconderService } from "../../../service/utils/PasswordEnconderService";
-import { GraphqlContext } from "../../context/GraphqlContext";
 import { LoginInput } from "../../types/auth/LoginInput";
 import { LoginPayload } from "../../types/auth/LoginPayload";
 
@@ -23,7 +22,7 @@ class AuthResolver {
     }
 
     @Mutation(() => LoginPayload)
-    async login(@Arg("input") input: LoginInput, @Ctx() context: GraphqlContext) {
+    async login(@Arg("input") input: LoginInput) {
         const user = await this.userService.findByEmail(input.email);
 
         if (user) {
