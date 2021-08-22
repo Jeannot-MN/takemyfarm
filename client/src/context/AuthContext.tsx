@@ -65,12 +65,15 @@ export function AuthContextProvider({ children }: Props) {
 
                     return result;
                 } else {
-                    return result;
+                    Toast(
+                        'error',
+                        'Something went wrong! Please ensure that your username and password are correct'
+                    );
                 }
             } catch (e) {
                 Toast(
                     'error',
-                    'Something went wrong! Please ensure that your username and password is correct'
+                    'Something went wrong! Please ensure that your username and password are correct'
                 );
             }
         },

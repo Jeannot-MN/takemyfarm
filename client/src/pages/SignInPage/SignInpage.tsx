@@ -47,12 +47,7 @@ export function SignInPage() {
                         const loginResponse: any = await handleLogin(email, password);
                         console.log(loginResponse);
 
-                        if (!loginResponse || loginResponse.data.login.token === null) {
-                            Toast(
-                                'error',
-                                'Something went wrong! Please ensure that your username and password is correct'
-                            );
-                        } else {
+                        if (loginResponse && loginResponse.data.login.token) {
                             navigate('/');
                         }
                     } catch (error) {
