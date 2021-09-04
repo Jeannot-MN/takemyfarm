@@ -34,7 +34,7 @@ import TakeMyFarmLogo from '../../assets/take_my_farm.png';
 import { gql, useMutation, useQuery } from '@apollo/client';
 
 
-const fragment = gql`
+export const fragment = gql`
   fragment Header_userInformation on UserDTO {
     name
     profileImageUri
@@ -150,16 +150,8 @@ export function Header() {
 
   const { loading, error, data } = useQuery(query);
 
-  
-
-  useEffect(() => {
-    if (!auth.authenticated) {
-      navigate("/login")
-    }
-  }, [auth.authenticated])
-
   if (loading) {
-    return <Typography variant="h4"> Loading...</Typography>
+    return <></>
   }
 
   const handleDrawerClose = () => {
@@ -181,9 +173,6 @@ export function Header() {
     handleDrawerClose();
   };
 
-  if(!data){
-    return <></>
-  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -227,7 +216,7 @@ export function Header() {
               src={
                 TakeMyFarmLogo
               }
-              alt="ABC Portal"
+              alt="Take my farm"
             />
           </IconButton>
           <Box display="flex" justifyContent="flex-end" width="100%">
@@ -391,14 +380,14 @@ export function Header() {
               }}
             >
               <ListItemIcon>
-                <Suspense fallback="Loading..">
+                {/* <Suspense fallback="Loading..">
                   <Box>
                     <Avatar
                       src={data.me.profileImageUri || ''}
                       alt={data.me.profileImageUri || ''}
                     />
                   </Box>
-                </Suspense>
+                </Suspense> */}
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>

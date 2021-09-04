@@ -1,7 +1,7 @@
 import { User } from "src/domain/entities/User";
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
-import { UserRepository } from "../../domain/repositories/UserRepository";
+import { UserRepository } from "../domain/repositories/UserRepository";
 
 @Service()
 export class UserService {

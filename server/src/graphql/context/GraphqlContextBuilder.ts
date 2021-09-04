@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
-import { UserService } from "../../service/user/UserService";
+import { UserService } from "../../service/UserService";
 import { JWTService } from "../../service/utils/JWTService";
 import { GraphqlContext } from "./GraphqlContext";
 

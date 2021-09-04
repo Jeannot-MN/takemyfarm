@@ -6,8 +6,7 @@ import {Currency} from "../../atoms/Formatters";
 import {Product} from "../../types/Product";
 
 interface Props {
-    product: Readonly<Product
-        >;
+    product: Readonly<Product>;
 }
 
 function ProductCard(props: Props) {
@@ -23,7 +22,7 @@ function ProductCard(props: Props) {
         >
             <Box className={classes.imageContainer}>
                 <img
-                    src={product.images[0].uri}
+                    src={product.image}
                     className={classes.image}
                 />
             </Box>

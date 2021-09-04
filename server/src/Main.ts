@@ -8,6 +8,7 @@ import { Container } from "typeorm-typedi-extensions";
 import { GraphqlContext } from "./graphql/context/GraphqlContext";
 import { GraphqlContextBuilder } from "./graphql/context/GraphqlContextBuilder";
 import { AuthResolvers } from "./graphql/resolvers/auth/AuthResolver";
+import { ProductResolvers } from "./graphql/resolvers/product/ProductResolver";
 import { UserResolvers } from "./graphql/resolvers/user/UserResolver";
 
 @Service()
@@ -33,7 +34,8 @@ export class Main {
             schema: await buildSchema({
                 resolvers: [
                     ...UserResolvers,
-                    ...AuthResolvers
+                    ...AuthResolvers,
+                    ...ProductResolvers,
                 ],
                 validate: false
             }),

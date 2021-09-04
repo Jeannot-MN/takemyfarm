@@ -19,9 +19,6 @@ export function SignInPage() {
     const navigate = useNavigate();
     const { auth, handleLogin, hasRole } = useAuthContext();
 
-    console.log(auth);
-
-
     React.useEffect(() => {
         if (auth.authenticated) {
             if (hasRole(Role.ADMIN)) {
@@ -31,9 +28,6 @@ export function SignInPage() {
             }
         }
     }, [navigate, auth.authenticated, hasRole]);
-    if (auth.authenticated) {
-        return <></>;
-    }
     return (
         <Box display="flex" justifyContent="center">
             <Formik
@@ -74,7 +68,7 @@ export function SignInPage() {
                                     pb={10}
                                 >
                                     <Box pb={3} textAlign="center" maxWidth="500px">
-                                        <Typography variant="h5">Sign In</Typography>
+                                        <Typography variant="h5">Welcome</Typography>
                                     </Box>
 
                                     <FormItem>

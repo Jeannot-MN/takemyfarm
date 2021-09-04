@@ -1,7 +1,7 @@
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { Container } from "typeorm-typedi-extensions";
 import { RegisterUserInput } from "../../../graphql/types/user/RegisterUserInput";
-import { UserService } from "../../../service/user/UserService";
+import { UserService } from "../../../service/UserService";
 import { PasswordEnconderService } from "../../../service/utils/PasswordEnconderService";
 import { UserMapper } from "../../mappers/UserMapper";
 import { RegisterUserPayload } from "../../types/user/RegisterUserPayload";
@@ -21,12 +21,12 @@ export class UserMutationResolver {
 
     @Mutation(() => RegisterUserPayload)
     async registerUser(@Arg("input") input: RegisterUserInput) {
-        const user = this.userMapper.registerUserInputToUser(input);
+        let user = this.userMapper.registerUserInputToUser(input);
 
         const hashedPassword = await this.passwordEnconderService.encode(input.password);
         user.password = hashedPassword;
 
-        await this.userService.save(user);
+        user = await this.userService.save(user);
         return new RegisterUserPayload(this.userMapper.userToUserDTO(user));
     }
 }

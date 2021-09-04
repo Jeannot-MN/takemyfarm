@@ -1,5 +1,6 @@
 import { Box, makeStyles } from "@material-ui/core";
 import {Route, Routes} from 'react-router-dom';
+import { HomePage } from "../../pages/HomePage/HomePage";
 import { SignInPage } from "../../pages/SignInPage/SignInpage";
 import { Header } from "../Header/Header";
 
@@ -24,6 +25,7 @@ export function Navigation(){
         <Box className={classes.root}>
             <Route element={<Header/>}/>
            <Routes>
+               <Route path="/" element={<HomePage/>}/>
                <Route path="/login" element={<SignInPage/>}/>
            </Routes>
         </Box>

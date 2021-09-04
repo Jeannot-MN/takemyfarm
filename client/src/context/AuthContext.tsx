@@ -1,9 +1,9 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState, useContext } from "react";
 import useLocalStorage from 'react-use/lib/useLocalStorage'
 import jwtDecode from 'jwt-decode';
+import {fragment} from '../modules/Header/Header'
 import { Role } from "../types";
 import { gql, useMutation } from '@apollo/client';
-
 import { Toast } from '../modules/Toast/Toast';
 
 interface Props {
@@ -43,7 +43,7 @@ export function AuthContextProvider({ children }: Props) {
                     console.log(loading);
 
                     const token = result.data.login.token;
-                    const email = result.data.login.email;
+                    const email = result.data.login.user.email;
 
                     const decoded = jwtDecode(token) as {
                         email: string;
@@ -188,9 +188,12 @@ export interface AuthContextStateType {
 }
 
 const LOGIN_MUTATION = gql`
+    ${fragment}
     mutation Login($input: LoginInput!){
         login(input: $input){
-            email
+            user{
+                ...Header_userInformation
+            }
             token
         }
     }

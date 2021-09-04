@@ -33,6 +33,8 @@ interface Props {
 
 
 export default function ApolloContextProvider({ children }: Props) {
+    console.log(client);
+    
     return (
         <ApolloProvider client={client as any}>
             {children}

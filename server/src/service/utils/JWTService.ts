@@ -33,8 +33,7 @@ export class JWTService {
 
     public decodeToken(token: string): string {
         try {
-            const data = jwt.verify(token, "FIXME JSON TOKEN SECRET");
-            //@ts-ignore
+            const data = jwt.verify(token, "FIXME JSON TOKEN SECRET") as TokenDataProp;
             return data.email;
         } catch (e) {
             console.log(e.message);

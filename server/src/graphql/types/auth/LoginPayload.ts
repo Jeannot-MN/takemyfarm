@@ -1,10 +1,11 @@
 import { Field, ObjectType } from "type-graphql";
+import { UserDTO } from "../user/UserDTO";
 
 @ObjectType()
 export class LoginPayload {
 
-    constructor(email: string, token: string) {
-        this.email = email;
+    constructor(user: UserDTO, token: string) {
+        this.user = user;
         this.token = token;
     }
 
@@ -12,5 +13,5 @@ export class LoginPayload {
     token: string;
 
     @Field()
-    email: string;
+    user: UserDTO;
 }
