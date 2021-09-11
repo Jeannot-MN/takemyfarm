@@ -44,8 +44,8 @@ export function SignInPage() {
                         if (loginResponse && loginResponse.data.login.token) {
                             navigate('/');
                         }
-                    } catch (error) {
-                        Toast('error', error);
+                    } catch (error: any) {
+                        Toast('error', error.message);
                     }
                 }}
             >
@@ -123,7 +123,7 @@ export function SignInPage() {
                                             component={'button'}
                                             color="secondary"
                                             onClick={() => {
-                                                navigate('/signup');
+                                                navigate('/register');
                                             }}
                                         >
                                             Create Account

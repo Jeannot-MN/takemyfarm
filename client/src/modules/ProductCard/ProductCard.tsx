@@ -3,10 +3,10 @@ import styles from './ProductCardStyles';
 import {useScreenSize} from "../../hooks/useScreenSize";
 import {Box, Card, Tooltip, Typography} from "@material-ui/core";
 import {Currency} from "../../atoms/Formatters";
-import {Product} from "../../types/Product";
+import { ProductDto } from '../../generated/graphql';
 
 interface Props {
-    product: Readonly<Product>;
+    product: ProductDto;
 }
 
 function ProductCard(props: Props) {

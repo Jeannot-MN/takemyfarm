@@ -10,6 +10,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useNavigate } from 'react-router';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { Product } from '../../types/Product';
+import { ProductDto, useProduQueryQuery } from '../../generated/graphql';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function HomePage() {
 
-    const { loading, error, data, refetch } = useQuery(query,{
+    const { loading, error, data, refetch } = useProduQueryQuery({
         variables:{
             search: '',
         }
@@ -171,14 +172,14 @@ export function HomePage() {
                                 </Box>
 
                                 <Box className={classes.root} mt={ isDesktop ? 10 : 2}>
-                                    {data.products.map((product : Product, index:number) => {
+                                    {data && data.products.map((product : ProductDto, index:number) => {
                                         return (
                                             <Box className={classes.cardContainer} key={index}>
                                                 <ProductCard product={product} />
                                             </Box>
                                         )
                                     })}
-                                    {data.products.length === 0 && (
+                                    {data && data.products.length === 0 && (
                                         <Box mt={15}>
                                             <Typography variant={"h4"}>
                                                 Oops! No product found...
@@ -195,23 +196,6 @@ export function HomePage() {
 
     );
 };
-
-
-const query = gql`
-  query HomePageQuery(
-        $search: String!
-    ) {
-        products(q: $search) {
-            id
-            name
-            description
-            price
-            status
-            image
-            sellerId
-        }
-    }
-`;
 
 interface SearchProps {
     search: string;

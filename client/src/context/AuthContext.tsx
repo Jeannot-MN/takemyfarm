@@ -1,10 +1,10 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState, useContext } from "react";
 import useLocalStorage from 'react-use/lib/useLocalStorage'
 import jwtDecode from 'jwt-decode';
-import {fragment} from '../modules/Header/Header'
 import { Role } from "../types";
-import { gql, useMutation } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { Toast } from '../modules/Toast/Toast';
+import { useLoginMutation } from "../generated/graphql";
 
 interface Props {
     children: JSX.Element
@@ -19,11 +19,13 @@ export function AuthContextProvider({ children }: Props) {
     });
 
     const [auth, setAuth] = useState<AuthContextType | undefined>(() => {
+        console.log(localAuth);
+        
         authTokenLoaded.current = true;
         return localAuth;
     });
 
-    const [login, { loading }] = useMutation(LOGIN_MUTATION);
+    const [login, { loading }] = useLoginMutation();
 
     const handleLogin = useCallback(
         async function (username: string, password: string) {
@@ -38,12 +40,9 @@ export function AuthContextProvider({ children }: Props) {
                         }
                     }
                 })
-                if (result) {
-                    console.log(result);
-                    console.log(loading);
-
+                
+                if (result && result.data) {
                     const token = result.data.login.token;
-                    const email = result.data.login.user.email;
 
                     const decoded = jwtDecode(token) as {
                         email: string;
@@ -57,7 +56,11 @@ export function AuthContextProvider({ children }: Props) {
                         roles: decoded.roles
                             ? parseRoles(decoded.roles)
                             : [Role.UNKNOWN],
-                        expiration: decoded.exp
+                        expiration: decoded.exp,
+                        user: { 
+                            name: result.data.login.user.name,
+                            profileImageUri: result.data.login.user.profileImageUri || ''
+                        }
                     };
 
                     setAuth(newAuth);
@@ -97,8 +100,6 @@ export function AuthContextProvider({ children }: Props) {
     useEffect(() => {
         let innerAuth: AuthContextType | undefined = { authenticated: false };
 
-
-        // TODO: Localize expiry
         if (localAuth !== null) {
             if(localAuth?.authenticated && localAuth?.expiration * 1000 < Date.now()) {
                 handleLogout();
@@ -148,6 +149,11 @@ interface RoleProps {
     description: string;
 }
 
+interface UserProps {
+    name: string;
+    profileImageUri: string;
+}
+
 function parseRoles(roles: RoleProps[]) {
     return roles.map((role) => {
         switch (role.name) {
@@ -174,7 +180,8 @@ export type AuthContextType =
         token: string;
         authenticated: true;
         roles?: Role[];
-        expiration: number
+        expiration: number;
+        user: UserProps
     }
     | {
         authenticated: false;
@@ -186,18 +193,5 @@ export interface AuthContextStateType {
     handleLogout: () => void;
     hasRole(role: Role): boolean;
 }
-
-const LOGIN_MUTATION = gql`
-    ${fragment}
-    mutation Login($input: LoginInput!){
-        login(input: $input){
-            user{
-                ...Header_userInformation
-            }
-            token
-        }
-    }
-`;
-
 export default AuthContextProvider;
 export const useAuthContext = () => useContext(AuthContext);

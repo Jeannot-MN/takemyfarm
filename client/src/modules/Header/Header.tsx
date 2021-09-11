@@ -31,24 +31,6 @@ import MyLocationOutlinedIcon from '@material-ui/icons/MyLocationOutlined';
 import { useAuthContext } from '../../context/AuthContext';
 import { useScreenSize } from '../../hooks/useScreenSize';
 import TakeMyFarmLogo from '../../assets/take_my_farm.png';
-import { gql, useMutation, useQuery } from '@apollo/client';
-
-
-export const fragment = gql`
-  fragment Header_userInformation on UserDTO {
-    name
-    profileImageUri
-  }
-`;
-
-const query = gql`
-  ${fragment}
-  query HeaderQuery {
-    me{
-      ...Header_userInformation
-    }
-  }
-`;
 
 const drawerWidth = 300;
 
@@ -144,15 +126,9 @@ export function Header() {
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useScreenSize(600);
-  const { auth, handleLogout } = useAuthContext();
+  const { auth , handleLogout } = useAuthContext();
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-  const { loading, error, data } = useQuery(query);
-
-  if (loading) {
-    return <></>
-  }
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -225,7 +201,7 @@ export function Header() {
                 {isDesktop ? (
                   <Box display="flex" alignItems="center">
                     <Typography style={{ color: 'black' }}>
-                      Hi, {data.me.name}
+                      Hi, {auth.user.name}
                     </Typography>
                     <Button
                       color="primary"
@@ -261,7 +237,7 @@ export function Header() {
                       variant="contained"
                       color="primary"
                       onClick={() => {
-                        navigate('/signup');
+                        navigate('/register');
                       }}
                     >
                       Sign Up
@@ -282,7 +258,7 @@ export function Header() {
                       style={{ color: 'white' }}
                       aria-label="Sign In"
                       onClick={() => {
-                        navigate('/signup');
+                        navigate('/register');
                       }}
                     >
                       <PersonAddIcon style={{ fontSize: '28px' }} />
@@ -380,14 +356,14 @@ export function Header() {
               }}
             >
               <ListItemIcon>
-                {/* <Suspense fallback="Loading..">
+                <Suspense fallback="Loading..">
                   <Box>
                     <Avatar
-                      src={data.me.profileImageUri || ''}
-                      alt={data.me.profileImageUri || ''}
+                      src={auth.user.profileImageUri || ''}
+                      alt={auth.user.profileImageUri || ''}
                     />
                   </Box>
-                </Suspense> */}
+                </Suspense>
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>

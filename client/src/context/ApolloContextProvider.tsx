@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ApolloClient from 'apollo-client';
+import ApolloClient, { DefaultOptions } from 'apollo-client';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -13,7 +13,6 @@ const httpLink = createHttpLink({
 const authLink = setContext(() => {
     
     const token : AuthContextType = JSON.parse(localStorage.getItem('auth') || '') as AuthContextType;
-    console.log(token);
     
     return {
         headers: {
@@ -22,9 +21,21 @@ const authLink = setContext(() => {
     }
 })
 
+const defaultOptions: DefaultOptions = {
+    watchQuery: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'ignore',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    },
+  }
+
 const client = new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    defaultOptions: defaultOptions
 })
 
 interface Props {
@@ -33,8 +44,7 @@ interface Props {
 
 
 export default function ApolloContextProvider({ children }: Props) {
-    console.log(client);
-    
+
     return (
         <ApolloProvider client={client as any}>
             {children}

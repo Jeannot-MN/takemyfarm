@@ -2,6 +2,7 @@ import { Box, makeStyles } from "@material-ui/core";
 import {Route, Routes} from 'react-router-dom';
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { SignInPage } from "../../pages/SignInPage/SignInpage";
+import { SignUpPage } from "../../pages/SignUpPage/SignUpPage";
 import { Header } from "../Header/Header";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +28,7 @@ export function Navigation(){
            <Routes>
                <Route path="/" element={<HomePage/>}/>
                <Route path="/login" element={<SignInPage/>}/>
+               <Route path="/register" element={<SignUpPage/>}/>
            </Routes>
         </Box>
     )
