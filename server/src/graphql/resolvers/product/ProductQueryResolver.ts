@@ -2,7 +2,7 @@ import { Arg, Query, Resolver } from "type-graphql";
 import Container from "typedi";
 import { ProductService } from "../../../service/ProductService";
 import { ProductMapper } from "../../mappers/ProductMapper";
-import { ProductDTO } from "../../types/product/ProductDTO";
+import { ProductPaginatedRespone } from "../../types/product/ProductPaginatedRespone";
 
 @Resolver()
 export class ProductQueryResolver {
@@ -15,9 +15,11 @@ export class ProductQueryResolver {
         this.productMapper = Container.get(ProductMapper);
     }
 
-    @Query(() => [ProductDTO])
-    async products(@Arg("q") q: string) {
-        const products = await this.productService.query(q);
-        return this.productMapper.productsToProductDTOs(products);
+    @Query(() => ProductPaginatedRespone)
+    async products(@Arg("q", { nullable: true }) q: string, @Arg("first", { nullable: true }) first: number, @Arg("after", { nullable: true }) after: number) {
+        const { data, total } = await this.productService.search(q || '', first || 5, after || 0);
+
+        return new ProductPaginatedRespone(this.productMapper.productsToProductDTOs(data), total);
     }
+
 }

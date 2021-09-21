@@ -1,11 +1,14 @@
 query ProduQuery( $search: String!) {
-    products(q: $search) {
-        id
-        name
-        description
-        price
-        status
-        image
-        sellerId
+    products(q: $search, first: 20) {
+        total
+        data {
+            id
+            name
+            description
+            price
+            status
+            image
+            sellerId
+        }
     }
 }

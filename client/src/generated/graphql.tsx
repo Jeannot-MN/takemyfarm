@@ -52,16 +52,24 @@ export type ProductDto = {
   status: Scalars['String'];
 };
 
+export type ProductPaginatedRespone = {
+  __typename?: 'ProductPaginatedRespone';
+  data: Array<ProductDto>;
+  total: Scalars['Float'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<UserDto>;
-  products: Array<ProductDto>;
+  products: ProductPaginatedRespone;
   users: Array<UserDto>;
 };
 
 
 export type QueryProductsArgs = {
-  q: Scalars['String'];
+  after?: Maybe<Scalars['Float']>;
+  first?: Maybe<Scalars['Float']>;
+  q?: Maybe<Scalars['String']>;
 };
 
 export type RegisterUserInput = {
@@ -109,7 +117,7 @@ export type ProduQueryQueryVariables = Exact<{
 }>;
 
 
-export type ProduQueryQuery = { __typename?: 'Query', products: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image: string, sellerId: number }> };
+export type ProduQueryQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedRespone', total: number, data: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image: string, sellerId: number }> } };
 
 export const Header_UserInformationFragmentDoc = gql`
     fragment Header_userInformation on UserDTO {
@@ -196,14 +204,17 @@ export type RegisterUserMutationMutationResult = Apollo.MutationResult<RegisterU
 export type RegisterUserMutationMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutationMutation, RegisterUserMutationMutationVariables>;
 export const ProduQueryDocument = gql`
     query ProduQuery($search: String!) {
-  products(q: $search) {
-    id
-    name
-    description
-    price
-    status
-    image
-    sellerId
+  products(q: $search, first: 20) {
+    total
+    data {
+      id
+      name
+      description
+      price
+      status
+      image
+      sellerId
+    }
   }
 }
     `;

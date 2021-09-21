@@ -172,14 +172,14 @@ export function HomePage() {
                                 </Box>
 
                                 <Box className={classes.root} mt={ isDesktop ? 10 : 2}>
-                                    {data && data.products.map((product : ProductDto, index:number) => {
+                                    {data && data.products.data.map((product : ProductDto, index:number) => {
                                         return (
                                             <Box className={classes.cardContainer} key={index}>
                                                 <ProductCard product={product} />
                                             </Box>
                                         )
                                     })}
-                                    {data && data.products.length === 0 && (
+                                    {data && data.products.total === 0 && (
                                         <Box mt={15}>
                                             <Typography variant={"h4"}>
                                                 Oops! No product found...

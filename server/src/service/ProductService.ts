@@ -1,5 +1,6 @@
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
+import { Paginate } from "../domain/entities/Paginate";
 import { Product } from "../domain/entities/Product";
 import { ProductRepository } from "../domain/repositories/ProductRepository";
 
@@ -22,5 +23,9 @@ export class ProductService {
 
     public save(product: Product): Promise<Product> {
         return this.productRepository.save(product);
+    }
+
+    public search(q:string, first:number, after:number): Promise<Paginate<Product>>{
+        return this.productRepository.search(q, first, after)
     }
 }
