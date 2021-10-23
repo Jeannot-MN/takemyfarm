@@ -10,7 +10,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useNavigate } from 'react-router';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { Product } from '../../types/Product';
-import { ProductDto, useProduQueryQuery } from '../../generated/graphql';
+import { ProductDto, useProductsQuery } from '../../generated/graphql';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function HomePage() {
 
-    const { loading, error, data, refetch } = useProduQueryQuery({
+    const { loading, error, data, refetch } = useProductsQuery({
         variables:{
             search: '',
         }
@@ -172,6 +172,7 @@ export function HomePage() {
                                 </Box>
 
                                 <Box className={classes.root} mt={ isDesktop ? 10 : 2}>
+                                    {/* @ts-ignore */}
                                     {data && data.products.data.map((product : ProductDto, index:number) => {
                                         return (
                                             <Box className={classes.cardContainer} key={index}>

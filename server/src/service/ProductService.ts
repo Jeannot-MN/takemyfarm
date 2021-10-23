@@ -13,6 +13,10 @@ export class ProductService {
         this.productRepository = productRepository;
     }
 
+    public findById(id: number): Promise<Product  | undefined> {
+        return this.productRepository.findById(id);
+    }
+
     public findAll(): Promise<Product[]> {
         return this.productRepository.findAll();
     }

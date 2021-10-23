@@ -11,6 +11,10 @@ export class ProductRepository extends Repository<Product>{
         return this.find({});
     }
 
+    public findById(id: number) {
+        return this.findOne({ id: id });
+    }
+
     public queryAll(q: string) {
         return this.createQueryBuilder()
             .where("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
@@ -28,8 +32,8 @@ export class ProductRepository extends Repository<Product>{
             .getMany();
 
         const total = await this.count();
-        
+
         return new Paginate(result, total);
-         
+
     }
 }

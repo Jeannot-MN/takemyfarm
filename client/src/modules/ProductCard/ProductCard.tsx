@@ -4,6 +4,7 @@ import {useScreenSize} from "../../hooks/useScreenSize";
 import {Box, Card, Tooltip, Typography} from "@material-ui/core";
 import {Currency} from "../../atoms/Formatters";
 import { ProductDto } from '../../generated/graphql';
+import { useNavigate } from 'react-router';
 
 interface Props {
     product: ProductDto;
@@ -14,10 +15,13 @@ function ProductCard(props: Props) {
     const isDesktop = useScreenSize(1000);
     const {product} = props;
 
+    const navigate = useNavigate();
+
     return (
         <Card
             className={classes.body}
             onClick={() => {
+                navigate(`/products/${product.id}`);
             }}
         >
             <Box className={classes.imageContainer}>

@@ -10,6 +10,10 @@ export class SellerRespository extends Repository<Seller>{
         return this.find({});
     }
 
+    public findById(id: number) {
+        return this.findOne({ id: id });
+    }
+
     public findByName(name: string){
         return this.findOne({where: {name: name}});
     }

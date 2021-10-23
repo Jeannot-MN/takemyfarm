@@ -11,6 +11,7 @@ const config : ConnectionOptions = {
     database: process.env.POSTGRES_DB || "postgres",
     entities: [...Entities],
     synchronize: true, 
+    // logging: true,
 };
 
 export default config;

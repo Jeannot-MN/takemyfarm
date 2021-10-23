@@ -12,6 +12,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import GroupIcon from '@material-ui/icons/Group';
 import Toolbar from '@material-ui/core/Toolbar';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import {
   createStyles,
   makeStyles,
@@ -317,30 +319,30 @@ export function Header() {
               selected={selectedIndex === 2}
               button
               onClick={(event) => {
-                handleNavigation('/users', event, 2);
+                handleNavigation('/cart', event, 2);
               }}
             >
               <ListItemIcon>
-                <IconButton aria-label="Users">
-                  <GroupIcon />
+                <IconButton aria-label="Cart">
+                  <ShoppingCartIcon />
                 </IconButton>
               </ListItemIcon>
-              <ListItemText primary="Users" />
+              <ListItemText primary="Cart" />
             </ListItem>
 
             <ListItem
               selected={selectedIndex === 3}
               button
               onClick={(event) => {
-                handleNavigation('/sites', event, 3);
+                handleNavigation('/wishlist', event, 3);
               }}
             >
               <ListItemIcon>
-                <IconButton aria-label="Sites">
-                  <MyLocationOutlinedIcon />
+                <IconButton aria-label="Wishlist">
+                  <FavoriteIcon />
                 </IconButton>
               </ListItemIcon>
-              <ListItemText primary="Sites" />
+              <ListItemText primary="Wishlist" />
             </ListItem>
           </List>
         ) : null}

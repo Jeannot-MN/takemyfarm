@@ -8,7 +8,7 @@ import { Container } from "typeorm-typedi-extensions";
 import { GraphqlContext } from "./graphql/context/GraphqlContext";
 import { GraphqlContextBuilder } from "./graphql/context/GraphqlContextBuilder";
 import { AuthResolvers } from "./graphql/resolvers/auth/AuthResolver";
-import { ProductResolvers } from "./graphql/resolvers/product/ProductResolver";
+import { ProductResolvers } from "./graphql/resolvers/product/ProductResolvers";
 import { UserResolvers } from "./graphql/resolvers/user/UserResolver";
 
 @Service()

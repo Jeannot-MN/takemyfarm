@@ -19,5 +19,5 @@ export function hasRole(user: User | null, role: Roles): boolean {
 }
 
 export function isAuthenticated(user: User | null): boolean {
-    return user ? true : false;
+    return !!user;
 }
