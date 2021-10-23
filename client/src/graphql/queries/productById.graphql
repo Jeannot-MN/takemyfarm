@@ -1,0 +1,17 @@
+query ProductById( $id: Float!) {
+    productById(id: $id){
+        name
+        description
+        price
+        status
+        image
+        seller {
+        id
+        name
+        email
+        mobileNumber
+        bannerImage
+        status
+        }
+    }
+}

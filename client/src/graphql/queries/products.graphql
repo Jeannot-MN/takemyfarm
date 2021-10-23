@@ -1,0 +1,14 @@
+query Products( $search: String!) {
+    products(q: $search, first: 20) {
+        total
+        data {
+            id
+            name
+            description
+            price
+            status
+            image
+            sellerId
+        }
+    }
+}
