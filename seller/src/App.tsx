@@ -1,25 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import ApolloContextProvider from './context/ApolloContextProvider';
+import { AuthContextProvider } from './context/AuthContext';
+import { ThemeController } from './context/ThemeContext';
+import { Navigation } from './modules/Navigation/Navigation';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <ApolloContextProvider>
+      <AuthContextProvider>
+        <ThemeController>
+            <ToastContainer position="top-right" autoClose={7000} />
+            <BrowserRouter>
+              <Navigation />
+            </BrowserRouter>
+        </ThemeController>
+      </AuthContextProvider>
+    </ApolloContextProvider>
   );
 }
 
