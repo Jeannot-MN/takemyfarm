@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import { Avatar, Box, Button, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -8,45 +8,41 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import GroupIcon from '@material-ui/icons/Group';
-import Toolbar from '@material-ui/core/Toolbar';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import {
   createStyles,
   makeStyles,
   Theme,
-  useTheme,
-  withStyles,
+  useTheme
 } from '@material-ui/core/styles';
-import { Avatar, Badge, Box, Button, Typography } from '@material-ui/core';
-import { useNavigate } from 'react-router';
-import clsx from 'clsx';
+import Toolbar from '@material-ui/core/Toolbar';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import MenuIcon from '@material-ui/icons/Menu';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import MyLocationOutlinedIcon from '@material-ui/icons/MyLocationOutlined';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import clsx from 'clsx';
+import React, { Suspense } from 'react';
+import { useNavigate } from 'react-router';
+import TakeMyFarmLogo from '../../assets/take_my_farm.png';
 import { useAuthContext } from '../../context/AuthContext';
 import { useScreenSize } from '../../hooks/useScreenSize';
-import TakeMyFarmLogo from '../../assets/take_my_farm.png';
 
 const drawerWidth = 300;
 
-const StyledBadge = withStyles((theme: Theme) =>
-  createStyles({
-    badge: {
-      right: -3,
-      top: 13,
-      border: `2px solid ${theme.palette.background.paper}`,
-      padding: '0 4px',
-      backgroundColor: '#276552',
-    },
-  })
-)(Badge);
+// const StyledBadge = withStyles((theme: Theme) =>
+//   createStyles({
+//     badge: {
+//       right: -3,
+//       top: 13,
+//       border: `2px solid ${theme.palette.background.paper}`,
+//       padding: '0 4px',
+//       backgroundColor: '#276552',
+//     },
+//   })
+// )(Badge);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

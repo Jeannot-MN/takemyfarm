@@ -1,10 +1,9 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState, useContext } from "react";
-import useLocalStorage from 'react-use/lib/useLocalStorage'
 import jwtDecode from 'jwt-decode';
-import { Role } from "../types";
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
-import { Toast } from '../modules/Toast/Toast';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import useLocalStorage from 'react-use/lib/useLocalStorage';
 import { useLoginMutation } from "../generated/graphql";
+import { Toast } from '../modules/Toast/Toast';
+import { Role } from "../types";
 
 interface Props {
     children: JSX.Element
@@ -25,7 +24,7 @@ export function AuthContextProvider({ children }: Props) {
         return localAuth;
     });
 
-    const [login, { loading }] = useLoginMutation();
+    const [login] = useLoginMutation();
 
     const handleLogin = useCallback(
         async function (username: string, password: string) {
@@ -80,7 +79,7 @@ export function AuthContextProvider({ children }: Props) {
                 );
             }
         },
-        [setLocalAuth]
+        [setLocalAuth, login]
     );
 
     const handleLogout = useCallback(() => {
@@ -111,7 +110,7 @@ export function AuthContextProvider({ children }: Props) {
             setAuth(innerAuth);
         }
 
-    }, [localAuth, auth]);
+    }, [localAuth, auth, handleLogout]);
 
     const hasRole = useCallback(
         (role: Role) => {

@@ -24,9 +24,9 @@ export class ProductQueryResolver {
     }
 
     @Query(() => ProductDTO)
-    async productById(@Arg("id", { nullable: false }) id: number){
-        const product = await this.productService.findById(id); 
-        if(product){
+    async productById(@Arg("id", { nullable: false }) id: number) {
+        const product = await this.productService.findById(id);
+        if (product) {
             return this.productMapper.produtToProductDTO(product);
         }
 

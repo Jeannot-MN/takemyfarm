@@ -21,9 +21,9 @@ export function useImageUpload(): [
   number,
   (props: Props) => Promise<boolean>,
   boolean
-] {
+] | null {
   // const [ready, setReady] = useState(false);
-  const [progress, setProgress] = useState<number>(0);
+  /*const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState(false);
   const send = useCallback(
     ({uri, method = 'GET', headers = {}, body}: Props): Promise<boolean> => {
@@ -110,5 +110,6 @@ export function useImageUpload(): [
   //     }
   //   };
 
-  return [progress, send, error];
+  return [progress, send, error];*/
+  return null;
 }

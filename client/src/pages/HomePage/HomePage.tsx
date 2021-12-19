@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react';
-import { ErrorMessage, Form, Formik } from 'formik';
 import { Box, InputAdornment, Typography } from "@material-ui/core";
-import { useScreenSize } from "../../hooks/useScreenSize";
-import ProductCard from "../../modules/ProductCard/ProductCard";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { FTextField } from "../../modules/FMaterial/FTextfield/FTextField";
+import { Form, Formik } from 'formik';
+import React from 'react';
 import SearchIcon from '../../assets/SearchIcon.svg';
-import { useAuthContext } from "../../context/AuthContext";
-import { useNavigate } from 'react-router';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { Product } from '../../types/Product';
 import { ProductDto, useProductsQuery } from '../../generated/graphql';
+import { useScreenSize } from "../../hooks/useScreenSize";
+import { FTextField } from "../../modules/FMaterial/FTextfield/FTextField";
+import ProductCard from "../../modules/ProductCard/ProductCard";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function HomePage() {
 
-    const { loading, error, data, refetch } = useProductsQuery({
+    const { loading, data, refetch } = useProductsQuery({
         variables:{
             search: '',
         }
@@ -63,10 +59,7 @@ export function HomePage() {
 
     const classes = useStyles();
     const isDesktop = useScreenSize(600);
-    const [page, setPage] = React.useState(0);
     const [searchValue, setSearchValue] = React.useState<string>('');
-    const {auth} = useAuthContext();
-    const navigate = useNavigate();
     // const [sort, setSort] = React.useState({
     //     field: 'NAME',
     //     direction: 'ASCENDING',

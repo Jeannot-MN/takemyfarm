@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@material-ui/core';
-import React from 'react'; 
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useProductByIdQuery } from '../../generated/graphql';
 import styles from './ProductPageStyles';
@@ -7,7 +7,7 @@ import styles from './ProductPageStyles';
 export function ProductPage(){
     const {productId} = useParams();
 
-    const { loading, error, data, refetch } = useProductByIdQuery({
+    const { data } = useProductByIdQuery({
         variables:{
             id: parseInt(productId),
         }

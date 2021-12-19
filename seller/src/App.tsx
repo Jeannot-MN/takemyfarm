@@ -9,7 +9,6 @@ import { Navigation } from './modules/Navigation/Navigation';
 
 function App() {
   return (
-
     <ApolloContextProvider>
       <AuthContextProvider>
         <ThemeController>

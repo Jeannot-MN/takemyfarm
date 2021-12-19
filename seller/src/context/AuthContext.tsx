@@ -1,10 +1,9 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState, useContext } from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import useLocalStorage from 'react-use/lib/useLocalStorage'
 import jwtDecode from 'jwt-decode';
-import { Role } from "../types";
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
-import { Toast } from '../modules/Toast/Toast';
-import { useLoginMutation } from "../generated/graphql";
+import {Role} from "../types";
+import {Toast} from '../modules/Toast/Toast';
+import {useLoginMutation} from "../generated/graphql";
 
 interface Props {
     children: JSX.Element

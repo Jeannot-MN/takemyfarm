@@ -25,7 +25,7 @@ export const theme = createTheme({
 
     MuiButton: {
       root: {
-        borderRadius: '10px',
+        borderRadius: '30px',
         textTransform: 'none',
         color: 'white',
         fontWeight: 400,

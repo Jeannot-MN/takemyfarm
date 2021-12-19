@@ -27,6 +27,7 @@ function ProductCard(props: Props) {
             <Box className={classes.imageContainer}>
                 <img
                     src={product.image}
+                    alt={product.name}
                     className={classes.image}
                 />
             </Box>

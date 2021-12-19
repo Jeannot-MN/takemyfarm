@@ -1,24 +1,15 @@
-import React from 'react';
-import { Box, Button, CircularProgress, Link, Typography, } from '@material-ui/core';
+import { Box, Button, CircularProgress, Link, Typography } from '@material-ui/core';
 import { Form, Formik } from 'formik';
-import FormItem from '../../atoms/FormItem';
-import { FTextField } from '../../modules/FMaterial/FTextfield/FTextField';
-import { FTextFieldPassword } from '../../modules/FMaterial/FTextfield/FTextFieldPassword';
+import React from 'react';
 import { useNavigate } from 'react-router';
 import * as yup from 'yup';
-import './SignUpPageStyling.css';
+import FormItem from '../../atoms/FormItem';
 import { useAuthContext } from '../../context/AuthContext';
-import { makeStyles } from '@material-ui/core/styles';
-import { Toast } from '../../modules/Toast/Toast';
 import { useRegisterUserMutationMutation } from '../../generated/graphql';
-
-const useStyles = makeStyles(() => ({
-  errorMessage: {
-    color: '#f44336',
-    fontFamily: 'Montserrat,Georama',
-    fontSize: '0.75rem',
-  },
-}));
+import { FTextField } from '../../modules/FMaterial/FTextfield/FTextField';
+import { FTextFieldPassword } from '../../modules/FMaterial/FTextfield/FTextFieldPassword';
+import { Toast } from '../../modules/Toast/Toast';
+import './SignUpPageStyling.css';
 
 const signUpSchema = yup.object().shape({
   email: yup.string().email('Email not valid').required('Email is required.'),
@@ -36,7 +27,6 @@ const signUpSchema = yup.object().shape({
 });
 
 export function SignUpPage() {
-  const classes = useStyles();
   const navigate = useNavigate();
   const { auth, handleLogin } = useAuthContext();
 
