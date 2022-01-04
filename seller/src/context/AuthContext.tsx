@@ -1,9 +1,10 @@
-import {createContext, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import useLocalStorage from 'react-use/lib/useLocalStorage'
 import jwtDecode from 'jwt-decode';
-import {Role} from "../types";
-import {Toast} from '../modules/Toast/Toast';
+import { Role } from "../types";
+import { Toast } from '../modules/Toast/Toast';
 import { useLoginMutation } from "../generated/graphql";
+import { SellerContext } from "./SellerContext";
 
 interface Props {
     children: JSX.Element
@@ -12,6 +13,7 @@ interface Props {
 export function AuthContextProvider({ children }: Props) {
     const loggingOut = useRef(false);
     const authTokenLoaded = useRef<boolean>(false);
+    const { setSeller } = useContext(SellerContext)
 
     const [localAuth, setLocalAuth] = useLocalStorage<AuthContextType>('auth', {
         authenticated: false,
@@ -19,7 +21,7 @@ export function AuthContextProvider({ children }: Props) {
 
     const [auth, setAuth] = useState<AuthContextType | undefined>(() => {
         console.log(localAuth);
-        
+
         authTokenLoaded.current = true;
         return localAuth;
     });
@@ -39,7 +41,7 @@ export function AuthContextProvider({ children }: Props) {
                         }
                     }
                 })
-                
+
                 if (result && result.data && result.data.login.user.seller) {
                     const token = result.data.login.token;
 
@@ -56,7 +58,7 @@ export function AuthContextProvider({ children }: Props) {
                             ? parseRoles(decoded.roles)
                             : [Role.UNKNOWN],
                         expiration: decoded.exp,
-                        user: { 
+                        user: {
                             name: result.data.login.user.name,
                             profileImageUri: result.data.login.user.profileImageUri || ''
                         }
@@ -64,6 +66,12 @@ export function AuthContextProvider({ children }: Props) {
 
                     setAuth(newAuth);
                     setLocalAuth(newAuth);
+
+                    localStorage.setItem(
+                        'seller',
+                        JSON.stringify(result.data.login.user.seller)
+                    );
+                    setSeller(result.data.login.user.seller);
 
                     return result;
                 } else {
@@ -86,6 +94,7 @@ export function AuthContextProvider({ children }: Props) {
         if (auth?.authenticated) {
             setAuth({ authenticated: false });
             setLocalAuth({ authenticated: false });
+            localStorage.removeItem('seller');
         }
     }, [auth?.authenticated, setLocalAuth]);
 
@@ -100,11 +109,11 @@ export function AuthContextProvider({ children }: Props) {
         let innerAuth: AuthContextType | undefined = { authenticated: false };
 
         if (localAuth !== null) {
-            if(localAuth?.authenticated && localAuth?.expiration * 1000 < Date.now()) {
+            if (localAuth?.authenticated && localAuth?.expiration * 1000 < Date.now()) {
                 handleLogout();
                 loggingOut.current = false;
             }
-            
+
             innerAuth = localAuth;
 
             setAuth(innerAuth);
