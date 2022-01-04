@@ -3,6 +3,22 @@ mutation Login($input: LoginInput!){
         user {
             name
             profileImageUri
+            seller {
+                id
+                name
+                description
+                email
+                mobileNumber
+                bannerImage
+                status
+                address{
+                    street
+                    suburb
+                    city
+                    postCode
+                    province
+                }
+            }   
         }
         token
     }

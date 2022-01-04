@@ -3,7 +3,7 @@ import useLocalStorage from 'react-use/lib/useLocalStorage'
 import jwtDecode from 'jwt-decode';
 import {Role} from "../types";
 import {Toast} from '../modules/Toast/Toast';
-import {useLoginMutation} from "../generated/graphql";
+import { useLoginMutation } from "../generated/graphql";
 
 interface Props {
     children: JSX.Element
@@ -40,7 +40,7 @@ export function AuthContextProvider({ children }: Props) {
                     }
                 })
                 
-                if (result && result.data) {
+                if (result && result.data && result.data.login.user.seller) {
                     const token = result.data.login.token;
 
                     const decoded = jwtDecode(token) as {

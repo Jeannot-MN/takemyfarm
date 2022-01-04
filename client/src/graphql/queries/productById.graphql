@@ -6,12 +6,19 @@ query ProductById( $id: Float!) {
         status
         image
         seller {
-        id
-        name
-        email
-        mobileNumber
-        bannerImage
-        status
+            id
+            name
+            email
+            mobileNumber
+            bannerImage
+            status
+            address {
+                street
+                suburb
+                city
+                postCode
+                province
+            }
         }
     }
 }

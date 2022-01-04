@@ -7,9 +7,7 @@ import { Service } from "typedi";
 import { Container } from "typeorm-typedi-extensions";
 import { GraphqlContext } from "./graphql/context/GraphqlContext";
 import { GraphqlContextBuilder } from "./graphql/context/GraphqlContextBuilder";
-import { AuthResolvers } from "./graphql/resolvers/auth/AuthResolver";
-import { ProductResolvers } from "./graphql/resolvers/product/ProductResolvers";
-import { UserResolvers } from "./graphql/resolvers/user/UserResolver";
+import { Resolvers } from "./graphql/resolvers";
 
 @Service()
 export class Main {
@@ -33,9 +31,7 @@ export class Main {
         const apolloServer = new ApolloServer({
             schema: await buildSchema({
                 resolvers: [
-                    ...UserResolvers,
-                    ...AuthResolvers,
-                    ...ProductResolvers,
+                    ...Resolvers
                 ],
                 validate: false
             }),

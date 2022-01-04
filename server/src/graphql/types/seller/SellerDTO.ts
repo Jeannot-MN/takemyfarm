@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
+import AddressDTO from "../address/AddressDTO";
 
 @ObjectType()
 export class SellerDTO {
@@ -10,6 +11,9 @@ export class SellerDTO {
     name: string;
 
     @Field()
+    description: string;
+
+    @Field({nullable: true})
     bannerImage: string;
 
     @Field()
@@ -20,4 +24,7 @@ export class SellerDTO {
 
     @Field()
     status: string;
+
+    @Field()
+    address: AddressDTO;
 }

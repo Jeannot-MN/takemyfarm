@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Address } from "./Address";
 
 @Entity("seller")
 @Unique(["name"])
@@ -11,6 +12,9 @@ export class Seller {
     name: string;
 
     @Column()
+    description: string;
+
+    @Column({ nullable: true })
     bannerImage: string;
 
     @Column()
@@ -21,4 +25,8 @@ export class Seller {
 
     @Column()
     status: string;
+
+    @OneToOne(() => Address, { eager: true, cascade: true })
+    @JoinColumn()
+    address: Address;
 }

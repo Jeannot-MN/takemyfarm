@@ -14,6 +14,23 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddressDto = {
+  __typename?: 'AddressDTO';
+  city: Scalars['String'];
+  postCode: Scalars['String'];
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  suburb: Scalars['String'];
+};
+
+export type AddressInput = {
+  city: Scalars['String'];
+  postCode: Scalars['String'];
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  suburb: Scalars['String'];
+};
+
 export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -28,12 +45,18 @@ export type LoginPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: LoginPayload;
+  registerSeller: RegisterSellerPayload;
   registerUser: RegisterUserPayload;
 };
 
 
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+export type MutationRegisterSellerArgs = {
+  input: RegisterSellerInput;
 };
 
 
@@ -79,6 +102,20 @@ export type QueryProductsArgs = {
   q?: Maybe<Scalars['String']>;
 };
 
+export type RegisterSellerInput = {
+  address: AddressInput;
+  description: Scalars['String'];
+  email: Scalars['String'];
+  mobileNumber: Scalars['String'];
+  name: Scalars['String'];
+  user: RegisterUserInput;
+};
+
+export type RegisterSellerPayload = {
+  __typename?: 'RegisterSellerPayload';
+  sellerId: Scalars['Float'];
+};
+
 export type RegisterUserInput = {
   email: Scalars['String'];
   mobileNumber: Scalars['String'];
@@ -95,7 +132,9 @@ export type RegisterUserPayload = {
 
 export type SellerDto = {
   __typename?: 'SellerDTO';
+  address: AddressDto;
   bannerImage: Scalars['String'];
+  description: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Float'];
   mobileNumber: Scalars['String'];
@@ -110,6 +149,7 @@ export type UserDto = {
   mobileNumber?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   profileImageUri?: Maybe<Scalars['String']>;
+  seller?: Maybe<SellerDto>;
   surname?: Maybe<Scalars['String']>;
 };
 
@@ -118,7 +158,14 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', token: string, user: { __typename?: 'UserDTO', name: string, profileImageUri?: Maybe<string> } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', token: string, user: { __typename?: 'UserDTO', name: string, profileImageUri?: Maybe<string>, seller?: Maybe<{ __typename?: 'SellerDTO', id: number, name: string, description: string, email: string, mobileNumber: string, bannerImage: string, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } }> } } };
+
+export type RegisterSellerMutationVariables = Exact<{
+  input: RegisterSellerInput;
+}>;
+
+
+export type RegisterSellerMutation = { __typename?: 'Mutation', registerSeller: { __typename?: 'RegisterSellerPayload', sellerId: number } };
 
 
 export const LoginDocument = gql`
@@ -127,6 +174,22 @@ export const LoginDocument = gql`
     user {
       name
       profileImageUri
+      seller {
+        id
+        name
+        description
+        email
+        mobileNumber
+        bannerImage
+        status
+        address {
+          street
+          suburb
+          city
+          postCode
+          province
+        }
+      }
     }
     token
   }
@@ -158,3 +221,36 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const RegisterSellerDocument = gql`
+    mutation RegisterSeller($input: RegisterSellerInput!) {
+  registerSeller(input: $input) {
+    sellerId
+  }
+}
+    `;
+export type RegisterSellerMutationFn = Apollo.MutationFunction<RegisterSellerMutation, RegisterSellerMutationVariables>;
+
+/**
+ * __useRegisterSellerMutation__
+ *
+ * To run a mutation, you first call `useRegisterSellerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterSellerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerSellerMutation, { data, loading, error }] = useRegisterSellerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRegisterSellerMutation(baseOptions?: Apollo.MutationHookOptions<RegisterSellerMutation, RegisterSellerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterSellerMutation, RegisterSellerMutationVariables>(RegisterSellerDocument, options);
+      }
+export type RegisterSellerMutationHookResult = ReturnType<typeof useRegisterSellerMutation>;
+export type RegisterSellerMutationResult = Apollo.MutationResult<RegisterSellerMutation>;
+export type RegisterSellerMutationOptions = Apollo.BaseMutationOptions<RegisterSellerMutation, RegisterSellerMutationVariables>;
