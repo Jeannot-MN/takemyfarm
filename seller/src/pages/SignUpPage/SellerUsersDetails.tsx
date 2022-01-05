@@ -15,6 +15,7 @@ interface Props {
     values: SellerSignUpData;
     formRef: React.RefObject<FormikProps<UserDetails>>;
     setParentValues: (values: SellerSignUpData) => void;
+    initialValues: UserDetails
 }
 
 export function SellerUsersDetails(props: Props) {
@@ -39,14 +40,7 @@ export function SellerUsersDetails(props: Props) {
     return (
         <Formik<UserDetails>
             innerRef={props.formRef}
-            initialValues={{
-                name: '',
-                surname: '',
-                email: '',
-                mobileNumber: '',
-                password: '',
-                confirmPassword: ''
-            }}
+            initialValues={props.initialValues}
             validationSchema={validationSchema}
             onSubmit={(userDetails: UserDetails) => {
                 props.setParentValues({

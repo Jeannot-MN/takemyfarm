@@ -14,6 +14,7 @@ interface Props {
     values: SellerSignUpData;
     formRef: React.RefObject<FormikProps<GeneralDetails>>;
     setParentValues: (values: SellerSignUpData) => void;
+    initialValues: GeneralDetails
 }
 export function SellerGeneralDetails(props: Props) {
     const classes = styles();
@@ -47,19 +48,7 @@ export function SellerGeneralDetails(props: Props) {
         <Formik<GeneralDetails>
             innerRef={props.formRef}
             validationSchema={validationSchema}
-            initialValues={{
-                name: '',
-                description: '',
-                email: '',
-                mobileNumber: '',
-                address: {
-                    street: '',
-                    suburb: '',
-                    city: '',
-                    postCode: '',
-                    province: ''
-                }
-            }}
+            initialValues={props.initialValues}
             onSubmit={(generalDetails: GeneralDetails) => {
                 props.setParentValues({ 
                     ...props.values,

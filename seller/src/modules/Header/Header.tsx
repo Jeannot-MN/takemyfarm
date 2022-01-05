@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, { Suspense, useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -12,18 +12,20 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import {createStyles, makeStyles, Theme, useTheme, withStyles,} from '@material-ui/core/styles';
-import {Avatar, Badge, Box, Button, Typography} from '@material-ui/core';
-import {useNavigate} from 'react-router';
+import ListIcon from '@material-ui/icons/List';
+import { createStyles, makeStyles, Theme, useTheme, withStyles, } from '@material-ui/core/styles';
+import { Avatar, Badge, Box, Button, Typography } from '@material-ui/core';
+import { useNavigate } from 'react-router';
 import clsx from 'clsx';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import {useAuthContext} from '../../context/AuthContext';
-import {useScreenSize} from '../../hooks/useScreenSize';
+import { useAuthContext } from '../../context/AuthContext';
+import { useScreenSize } from '../../hooks/useScreenSize';
 import TakeMyFarmLogo from '../../assets/take_my_farm.png';
+import { SellerContext } from '../../context/SellerContext';
 
 const drawerWidth = 300;
 
@@ -119,7 +121,8 @@ export function Header() {
     const classes = useStyles();
     const theme = useTheme();
     const isDesktop = useScreenSize(600);
-    const {auth, handleLogout} = useAuthContext();
+    const { auth, handleLogout } = useAuthContext();
+    const { seller } = useContext(SellerContext);
     const [open, setOpen] = React.useState(false);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -144,7 +147,7 @@ export function Header() {
 
     return (
         <div className={classes.root}>
-            <CssBaseline/>
+            <CssBaseline />
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
@@ -170,7 +173,7 @@ export function Header() {
                             [classes.hide]: open,
                         })}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
                     {/* ) : null} */}
 
@@ -181,7 +184,7 @@ export function Header() {
                         className={classes.logo}
                     >
                         <img
-                            style={{width: '150px'}}
+                            style={{ width: '150px' }}
                             src={
                                 TakeMyFarmLogo
                             }
@@ -191,36 +194,14 @@ export function Header() {
                     <Box display="flex" justifyContent="flex-end" width="100%">
                         {auth.authenticated ? (
                             <Box>
-                                {isDesktop ? (
-                                    <Box display="flex" alignItems="center">
-                                        <Typography style={{color: 'black'}}>
-                                            Hi, {auth.user.name}
-                                        </Typography>
-                                        <Button
-                                            color="primary"
-                                            style={{marginLeft: '10px'}}
-                                            onClick={() => {
-                                                handleLogout();
-                                                navigate('/login');
-                                            }}
-                                        >
-                                            Sign Out
-                                        </Button>
-                                    </Box>
-                                ) : (
-                                    <Box display="flex" alignItems="center">
-                                        <IconButton
-                                            style={{color: 'black'}}
-                                            aria-label="Sign Out"
-                                            onClick={() => {
-                                                handleLogout();
-                                                navigate('/login');
-                                            }}
-                                        >
-                                            <MeetingRoomIcon style={{fontSize: '28px'}}/>
-                                        </IconButton>
-                                    </Box>
-                                )}
+                                <Typography
+                                    style={{
+                                        color: '#000000',
+                                        fontWeight: 'bold'
+                                    }}
+                                >
+                                    {seller?.name}
+                                </Typography>
                             </Box>
                         ) : (
                             <Box>
@@ -236,7 +217,7 @@ export function Header() {
                                             Sign Up
                                         </Button>
                                         <Button
-                                            style={{marginLeft: '5px'}}
+                                            style={{ marginLeft: '5px' }}
                                             color="secondary"
                                             onClick={() => {
                                                 navigate('/login');
@@ -248,22 +229,22 @@ export function Header() {
                                 ) : (
                                     <Box>
                                         <IconButton
-                                            style={{color: 'white'}}
+                                            style={{ color: 'white' }}
                                             aria-label="Sign In"
                                             onClick={() => {
                                                 navigate('/register');
                                             }}
                                         >
-                                            <PersonAddIcon style={{fontSize: '28px'}}/>
+                                            <PersonAddIcon style={{ fontSize: '28px' }} />
                                         </IconButton>
                                         <IconButton
-                                            style={{color: 'white', marginLeft: '10px'}}
+                                            style={{ color: 'white', marginLeft: '10px' }}
                                             aria-label="Sign Up"
                                             onClick={() => {
                                                 navigate('/login');
                                             }}
                                         >
-                                            <ExitToAppIcon style={{fontSize: '28px'}}/>
+                                            <ExitToAppIcon style={{ fontSize: '28px' }} />
                                         </IconButton>
                                     </Box>
                                 )}
@@ -278,8 +259,8 @@ export function Header() {
                 variant={
                     auth.authenticated
                         ? isDesktop
-                        ? 'permanent'
-                        : 'temporary'
+                            ? 'permanent'
+                            : 'temporary'
                         : 'temporary'
                 }
                 className={clsx(classes.drawer, {
@@ -296,52 +277,68 @@ export function Header() {
                 <div className={classes.toolbar}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? (
-                            <ChevronRightIcon/>
+                            <ChevronRightIcon />
                         ) : (
-                            <ChevronLeftIcon/>
+                            <ChevronLeftIcon />
                         )}
                     </IconButton>
                 </div>
-                <Divider/>
+                <Divider />
 
                 {auth.authenticated ? (
-                    <List style={{height: '100%'}}>
+                    <List style={{ height: '100%' }}>
                         <ListItem
                             selected={selectedIndex === 2}
                             button
                             onClick={(event) => {
-                                handleNavigation('/cart', event, 2);
+                                handleNavigation('/products', event, 2);
                             }}
                         >
                             <ListItemIcon>
-                                <IconButton aria-label="Cart">
-                                    <ShoppingCartIcon/>
+                                <IconButton aria-label="My Products">
+                                    <ListIcon />
                                 </IconButton>
                             </ListItemIcon>
-                            <ListItemText primary="Cart"/>
+                            <ListItemText primary="My Products" />
                         </ListItem>
 
                         <ListItem
                             selected={selectedIndex === 3}
                             button
                             onClick={(event) => {
-                                handleNavigation('/wishlist', event, 3);
+                                handleNavigation('/purchases', event, 3);
                             }}
                         >
                             <ListItemIcon>
-                                <IconButton aria-label="Wishlist">
-                                    <FavoriteIcon/>
+                                <IconButton aria-label="Purchases">
+                                    <ShoppingCartIcon />
                                 </IconButton>
                             </ListItemIcon>
-                            <ListItemText primary="Wishlist"/>
+                            <ListItemText primary="Purchases" />
+                        </ListItem>
+
+                        <ListItem
+                            selected={selectedIndex === 4}
+                            button
+                            onClick={(event) => {
+                                handleLogout();
+                                navigate('/login');
+                            }}
+                        >
+                            <ListItemIcon>
+                                <IconButton aria-label="Logout">
+                                    <ExitToAppIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
                         </ListItem>
                     </List>
                 ) : null}
 
                 {auth.authenticated ? (
-                    <List style={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <List style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <ListItem
-                            style={{paddingRight: '48px'}}
+                            style={{ paddingRight: '48px' }}
                             selected={selectedIndex === 6}
                             button
                             onClick={(event) => {
@@ -358,7 +355,7 @@ export function Header() {
                                     </Box>
                                 </Suspense>
                             </ListItemIcon>
-                            <ListItemText primary="Profile"/>
+                            <ListItemText primary="Profile" />
                         </ListItem>
                     </List>
                 ) : (
@@ -366,7 +363,7 @@ export function Header() {
                 )}
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.toolbar}/>
+                <div className={classes.toolbar} />
             </main>
         </div>
     );

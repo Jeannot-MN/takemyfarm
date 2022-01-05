@@ -1,38 +1,38 @@
 import { FormikProps } from 'formik';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { SellerContext } from '../../context/SellerContext';
 import { RegisterSellerInput, useRegisterSellerMutation } from '../../generated/graphql';
 import { Steps, StepState } from '../../modules/Stepper/Steps';
 import { Toast } from '../../modules/Toast/Toast';
-import { SellerGeneralDetails } from './SellerGeneralDetails';
-import { SellerUsersDetails } from './SellerUsersDetails';
-import { GeneralDetails, SellerSignUpData, UserDetails } from './types';
+import { SellerGeneralDetails } from '../SignUpPage/SellerGeneralDetails';
+import { SellerUsersDetails } from '../SignUpPage/SellerUsersDetails';
+import { GeneralDetails, SellerSignUpData, UserDetails } from '../SignUpPage/types';
 
-const initialValues: SellerSignUpData = {
-    generalDetails: {
-        name: '',
-        description: '',
-        email: '',
-        mobileNumber: '',
-        address: {
-            street: '',
-            suburb: '',
-            city: '',
-            postCode: '',
-            province: ''
+export function EditSellerPage() {
+    const { seller, setSeller } = useContext(SellerContext);
+    const [values, setValues] = useState<SellerSignUpData>({
+        generalDetails: {
+            name: seller?.name || '',
+            description: seller?.description ||'',
+            email: seller?.email ||'',
+            mobileNumber: seller?.mobileNumber ||'',
+            address: {
+                street: seller?.address.street || '',
+                suburb: seller?.address.suburb ||'',
+                city: seller?.address.city ||'',
+                postCode: seller?.address.postCode ||'',
+                province: seller?.address.province ||''
+            }
+        },
+        user: {
+            name: '',
+            surname: '',
+            email: '',
+            mobileNumber: '',
+            password: '',
+            confirmPassword: '',
         }
-    },
-    user: {
-        name: '',
-        surname: '',
-        email: '',
-        mobileNumber: '',
-        password: '',
-        confirmPassword: '',
-    }
-}
-
-export function SignUpPage() {
-    const [values, setValues] = useState<SellerSignUpData>(initialValues);
+    });
 
     const [submitting, setSubmitting] = React.useState(false);
 
@@ -88,14 +88,14 @@ export function SignUpPage() {
                     setStep(step + 1);
                 }}
                 regress={() => setStep(step - 1)}
-                values={values}
                 initialValues={values.generalDetails}
+                values={values}
                 setParentValues={setValues}
             />
             <SellerUsersDetails
                 formRef={formRefArray[1]}
                 progress={async () => {
-                    setSubmitting(true);
+                    /* setSubmitting(true);
                     try {
                         const input: RegisterSellerInput = {
                             name: values.generalDetails.name,
@@ -114,12 +114,12 @@ export function SignUpPage() {
                         }
 
                         const response = await registerSeller({
-                            variables:{
+                            variables: {
                                 input
                             }
                         })
 
-                        if(response){
+                        if (response) {
                             Toast('success', 'Registration successful');
                         }
                     } catch (e: any) {
@@ -127,11 +127,11 @@ export function SignUpPage() {
                     } finally {
                         setSubmitting(false);
                     }
-                    setStepState(1, StepState.COMPLETE);
+                    setStepState(1, StepState.COMPLETE); */
                 }}
                 regress={() => setStep(step - 1)}
-                values={values}
                 initialValues={values.user}
+                values={values}
                 setParentValues={setValues}
             />
         </Steps>
