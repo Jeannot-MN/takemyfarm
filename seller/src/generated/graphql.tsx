@@ -31,6 +31,17 @@ export type AddressInput = {
   suburb: Scalars['String'];
 };
 
+export type GenerateUploadInput = {
+  uploadType: Scalars['String'];
+};
+
+export type GenerateUploadPayload = {
+  __typename?: 'GenerateUploadPayload';
+  getUri: Scalars['String'];
+  key: Scalars['String'];
+  putUri: Scalars['String'];
+};
+
 export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -44,9 +55,15 @@ export type LoginPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  generateUpload: GenerateUploadPayload;
   login: LoginPayload;
   registerSeller: RegisterSellerPayload;
   registerUser: RegisterUserPayload;
+};
+
+
+export type MutationGenerateUploadArgs = {
+  input: GenerateUploadInput;
 };
 
 
@@ -133,7 +150,7 @@ export type RegisterUserPayload = {
 export type SellerDto = {
   __typename?: 'SellerDTO';
   address: AddressDto;
-  bannerImage: Scalars['String'];
+  bannerImage?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Float'];
@@ -153,12 +170,19 @@ export type UserDto = {
   surname?: Maybe<Scalars['String']>;
 };
 
+export type GenerateUploadMutationVariables = Exact<{
+  input: GenerateUploadInput;
+}>;
+
+
+export type GenerateUploadMutation = { __typename?: 'Mutation', generateUpload: { __typename?: 'GenerateUploadPayload', putUri: string, getUri: string, key: string } };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', token: string, user: { __typename?: 'UserDTO', name: string, profileImageUri?: Maybe<string>, seller?: Maybe<{ __typename?: 'SellerDTO', id: number, name: string, description: string, email: string, mobileNumber: string, bannerImage: string, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } }> } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', token: string, user: { __typename?: 'UserDTO', name: string, profileImageUri?: Maybe<string>, seller?: Maybe<{ __typename?: 'SellerDTO', id: number, name: string, description: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } }> } } };
 
 export type RegisterSellerMutationVariables = Exact<{
   input: RegisterSellerInput;
@@ -168,6 +192,41 @@ export type RegisterSellerMutationVariables = Exact<{
 export type RegisterSellerMutation = { __typename?: 'Mutation', registerSeller: { __typename?: 'RegisterSellerPayload', sellerId: number } };
 
 
+export const GenerateUploadDocument = gql`
+    mutation GenerateUpload($input: GenerateUploadInput!) {
+  generateUpload(input: $input) {
+    putUri
+    getUri
+    key
+  }
+}
+    `;
+export type GenerateUploadMutationFn = Apollo.MutationFunction<GenerateUploadMutation, GenerateUploadMutationVariables>;
+
+/**
+ * __useGenerateUploadMutation__
+ *
+ * To run a mutation, you first call `useGenerateUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateUploadMutation, { data, loading, error }] = useGenerateUploadMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGenerateUploadMutation(baseOptions?: Apollo.MutationHookOptions<GenerateUploadMutation, GenerateUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateUploadMutation, GenerateUploadMutationVariables>(GenerateUploadDocument, options);
+      }
+export type GenerateUploadMutationHookResult = ReturnType<typeof useGenerateUploadMutation>;
+export type GenerateUploadMutationResult = Apollo.MutationResult<GenerateUploadMutation>;
+export type GenerateUploadMutationOptions = Apollo.BaseMutationOptions<GenerateUploadMutation, GenerateUploadMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

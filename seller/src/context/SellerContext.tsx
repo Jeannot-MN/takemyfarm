@@ -40,6 +40,6 @@ export type Seller = {
         street: string;
         suburb: string;
     };
-    bannerImage: string;
+    bannerImage?: string | null;
     status: string;
 };

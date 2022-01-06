@@ -1,198 +1,104 @@
-import { Box, Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import { FormikProps } from 'formik';
 import * as React from 'react';
-import * as yup from 'yup';
-import { FTextField } from '../../modules/FMaterial/FTextfield/FTextField';
-import { HeaderDivider } from '../../modules/HeaderDivider/HeaderDivider';
-import { SubHeader } from '../../modules/SubHeader/SubHeader';
-import Styles from '../../globalStyles/Styles';
+import ProductImages from '../../modules/ProductImageUpload/ProductImages';
+import { Steps, StepState } from '../../modules/Stepper/Steps';
+import { ProductGeneralDetails } from './ProductGeneralDetails';
+import { ProductGeneralDetailsTab, ProductImagesTab, ProductProps, ProductVideosTab } from './types';
 
-interface ProductProps {
-    name: string;
-    description: string;
-    price: number;
-    category: string;
-    imageUrl?: string;
-    videoUrl?: string;
+
+const initialValues: ProductProps = {
+    name: "",
+    description: "",
+    price: 0,
+    category: "",
+    images: [],
+    videos: []
 }
 
-const validationSchema = yup.object().shape({
-    name: yup
-        .string()
-        .required("The product name is required"),
-
-    description: yup
-        .string()
-        .required("The product description is required"),
-
-    price: yup
-        .number()
-        .required("The product price is required"),
-
-    category: yup
-        .string()
-        .required("The product category is required"),
-
-    imageUrl: yup.string(),
-
-    videoUrl: yup.string()
-})
-
 export const CreateProductPage = () => {
-    const classes = Styles();
+    const [values, setValues] = React.useState<ProductProps>(initialValues);
+
+    const [submitting, setSubmitting] = React.useState(false);
+
+    const [step, setStep] = React.useState(0);
+
+    const [stepStates, setStepStates] = React.useState([
+        StepState.UNVIEWED,
+        StepState.UNVIEWED,
+        StepState.UNVIEWED,
+    ]);
+
+    const setStepState = (index: number, value: StepState) => {
+        const oldState = stepStates;
+        oldState[index] = value;
+        setStepStates(oldState);
+    };
+
+    //eslint-disable-next-line
+    const formRefArray: React.RefObject<FormikProps<any>>[] | null = [
+        React.useRef<FormikProps<ProductGeneralDetailsTab>>(null),
+        React.useRef<FormikProps<ProductImagesTab>>(null),
+        React.useRef<FormikProps<ProductVideosTab>>(null)
+    ];
     return (
-        <Box
-            width="100%"
-            display="flex"
-            alignItems="center"
-            flexDirection="column"
-            pt="36px"
+        <Steps
+            submitting={submitting}
+            titles={['General Details', 'Images', "Videos"]}
+            currentStep={step}
+            stepStates={stepStates}
+            progress={async (step: number) => {
+                const innerRef = formRefArray[step].current;
+                if (innerRef) {
+                    innerRef.setFieldValue('submitDirection', 'progress', false);
+                    await innerRef.submitForm();
+                    innerRef.setSubmitting(false);
+                }
+            }}
+            regress={async (step: number) => {
+                const innerRef = formRefArray[step].current;
+                if (innerRef) {
+                    innerRef.setFieldValue('submitDirection', 'regress', false);
+                    await innerRef.submitForm();
+                    innerRef.setSubmitting(false);
+                }
+            }}
         >
-            <Box
-                width="100%"
-                display="flex"
-                alignItems="center"
-                flexDirection="column"
-                maxWidth="1440px"
-            >
-                <Box
-                    width="100%"
-                    display="flex"
-                    alignItems="center"
-                    flexDirection="column"
-                    maxWidth="1180px"
-                    pl="20px"
-                    pr="20px"
-                >
-                    <Formik<ProductProps>
-                        validationSchema={validationSchema}
-                        initialValues={{
-                            name: "",
-                            description: "",
-                            price: 0,
-                            category: "",
-                            imageUrl: "",
-                            videoUrl: ""
-                        }}
-                        onSubmit={() => { }}
-                    >
-                        {() => {
-                            return (
-                                <>
-                                    <Box
-                                        display="flex"
-                                        flexDirection="column"
-                                        width="100%"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                    >
-                                        <Box className={classes.boxAlignment}>
-                                            <Box display="flex" flexDirection="column" width="100%">
-                                                <HeaderDivider heading={'New Product'} />
-                                                <SubHeader heading={'PRODUCT DETAILS'} />
-                                            </Box>
-                                        </Box>
+            <ProductGeneralDetails
+                formRef={formRefArray[0]}
+                progress={() => {
+                    setStepState(0, StepState.COMPLETE);
+                    setStep(step + 1);
+                }}
+                regress={() => setStep(step - 1)}
+                values={values}
+                setParentValues={setValues}
+            />
 
-                                        <Box className={classes.boxAlignment}>
-                                            <Box display="flex" width="100%">
-                                                <Box width="100%">
-                                                    <FTextField
-                                                        className={classes.textField}
-                                                        label="Name"
-                                                        variant="outlined"
-                                                        field={{ name: 'name' }}
-                                                    />
-                                                </Box>
-                                            </Box>
+            <ProductImages
+                ref={formRefArray[1]}
+                progress={() => {
+                    setStepState(1, StepState.COMPLETE);
+                    setStep(step + 1);
+                }}
+                regress={() => setStep(step - 1)}
+                values={{
+                    images: values.images,
+                    submitDirection: 'progress',
+                }}
+                handleSubmit={(tab2) => setValues({ ...values, images: tab2.images })}
+                showEditIcon={false}
+            />
 
-                                            <Box display="flex" width="100%">
-                                                <Box width="100%">
-                                                    <FTextField
-                                                        className={classes.textField}
-                                                        label="Description"
-                                                        variant="outlined"
-                                                        field={{ name: 'description' }}
-                                                        multiline
-                                                        rowsMax={4}
-                                                        count={500}
-                                                    />
-                                                </Box>
-                                            </Box>
-                                        </Box>
-
-                                        <Box className={classes.boxAlignment} mt={2}>
-
-
-
-                                            <Box display="flex" width="100%">
-                                                <Box width="100%">
-                                                    <FTextField
-                                                        className={classes.textField}
-                                                        label="Price"
-                                                        variant="outlined"
-                                                        field={{ name: 'price' }}
-                                                    />
-                                                </Box>
-                                            </Box>
-
-                                            <Box display="flex" width="100%">
-                                                <Box width="100%">
-                                                    <FTextField
-                                                        className={classes.textField}
-                                                        label="Category"
-                                                        variant="outlined"
-                                                        field={{ name: 'category' }}
-                                                    />
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-
-                                    <Box
-                                        display="flex"
-                                        flexDirection="column"
-                                        width="100%"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                        pt="39.5px"
-                                    >
-                                        <Box className={classes.boxAlignment}>
-                                            <Box display="flex" flexDirection="column" width="100%">
-                                                <SubHeader heading={'MEDIA'} />
-                                            </Box>
-                                        </Box>
-
-
-                                        <Box className={classes.boxAlignment}>
-                                            <Box display="flex" width="100%">
-                                                <Box width="100%">
-                                                    <FTextField
-                                                        className={classes.textField}
-                                                        field={{ name: 'imageUrl' }}
-                                                        label="Image URL"
-                                                        variant="outlined"
-                                                    />
-                                                </Box>
-                                            </Box>
-
-                                            <Box display="flex" width="100%">
-                                                <Box width="100%">
-                                                    <FTextField
-                                                        className={classes.textField}
-                                                        field={{ name: 'videoUrl' }}
-                                                        label="Video URL"
-                                                        variant="outlined"
-                                                    />
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                </>
-                            )
-                        }}
-                    </Formik>
-                </Box>
-            </Box>
-        </Box>
+            <ProductGeneralDetails
+                formRef={formRefArray[1]}
+                progress={() => {
+                    setStepState(1, StepState.COMPLETE);
+                    setStep(step + 1);
+                }}
+                regress={() => setStep(step - 1)}
+                values={values}
+                setParentValues={setValues}
+            />
+        </Steps>
     )
 }
