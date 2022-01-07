@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SellerContext } from '../../context/SellerContext';
 import { CreateProductInput, useCreateProductMutation, ProductImageInput, ProductVideoInput } from '../../generated/graphql';
-import ProductVideos from '../../modules/PpoductVideoUpload/ProductVideos';
+import ProductVideos from '../../modules/ProductVideoUpload/ProductVideos';
 import ProductImages from '../../modules/ProductImageUpload/ProductImages';
 import { Steps, StepState } from '../../modules/Stepper/Steps';
 import { Toast } from '../../modules/Toast/Toast';

@@ -93,9 +93,13 @@ export default makeStyles((theme: Theme) =>
       position: 'relative',
     },
     productImage:{
-        width: '550px',
-        height: '450px'
+        width: '450px',
+        height: '350px'
     },
+    productVideo:{
+      width: '450px',
+      height: '350px'
+  },
     body: {
       position: 'relative',
       display: 'flex',
@@ -153,6 +157,11 @@ export default makeStyles((theme: Theme) =>
       fontSize: '16px',
       lineHeight: '24px',
       color: '#000000',
+    },
+    boxAlignment: {
+      display: 'flex',
+      width: '100%',
+      marginBottom: '10px'
     },
   })
 );

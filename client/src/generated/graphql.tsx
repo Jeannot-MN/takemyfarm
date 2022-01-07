@@ -234,7 +234,7 @@ export type ProductByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image?: Maybe<string>, images: Array<{ __typename?: 'ProductImageDTO', url: string }>, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
+export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image?: Maybe<string>, images: Array<{ __typename?: 'ProductImageDTO', url: string }>, videos: Array<{ __typename?: 'ProductVideoDTO', url: string }>, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
 
 export type ProductsQueryVariables = Exact<{
   search: Scalars['String'];
@@ -335,6 +335,9 @@ export const ProductByIdDocument = gql`
     status
     image
     images {
+      url
+    }
+    videos {
       url
     }
     seller {

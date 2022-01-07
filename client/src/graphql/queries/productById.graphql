@@ -8,6 +8,9 @@ query ProductById( $id: Float!) {
         images {
             url
         }
+        videos {
+            url
+        }
         seller {
             id
             name
