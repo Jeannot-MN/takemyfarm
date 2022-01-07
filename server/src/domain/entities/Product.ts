@@ -23,12 +23,15 @@ export class Product {
     @Column()
     status: string;
 
-    @Column()
+    @Column({nullable: true})
     image: string;
 
+    @Column({nullable: true})
+    category: string;
+
     @OneToMany(() => ProductImage, image => image.product, { eager: true, cascade: true })
-    images: [];
+    images: ProductImage[];
 
     @OneToMany(() => ProductVideo, video => video.product, { eager: true, cascade: true })
-    videos: [];
+    videos: ProductVideo[];
 }

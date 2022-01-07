@@ -20,7 +20,7 @@ export class JWTService {
                 tokenData,
                 "FIXME JSON TOKEN SECRET",
                 {
-                    expiresIn: "2h"
+                    expiresIn: "48h"
                 }
             );
 

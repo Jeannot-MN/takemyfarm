@@ -29,7 +29,7 @@ export class ProductService {
         return this.productRepository.save(product);
     }
 
-    public search(q:string, first:number, after:number): Promise<Paginate<Product>>{
-        return this.productRepository.search(q, first, after)
+    public search(q:string, first:number, after:number, sellerId: number): Promise<Paginate<Product>>{
+        return this.productRepository.search(q, first, after, sellerId);
     }
 }

@@ -1,9 +1,22 @@
+import * as React from 'react';
 import { Box, Button, Divider, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Typography } from "@material-ui/core";
 import { useNavigate } from "react-router";
+import { useProductsQuery } from "../../generated/graphql";
 import Styles from '../../globalStyles/DataTableStyling';
+import { SellerContext } from '../../context/SellerContext';
 
 export const ProductsPage = () => {
     const globalClasses = Styles();
+
+    const { seller } = React.useContext(SellerContext);
+    const { loading, data, refetch } = useProductsQuery({
+        variables:{
+            search: '',
+            sellerId: seller?.id || 0
+        }
+    });
+
+    const [searchValue, setSearchValue] = React.useState<string>('');
 
     const navigate = useNavigate();
     return (

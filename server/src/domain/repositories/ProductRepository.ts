@@ -22,16 +22,32 @@ export class ProductRepository extends Repository<Product>{
             .getMany();
     }
 
-    public async search(q: string, first: number, after: number): Promise<Paginate<Product>> {
-        const result = await this.createQueryBuilder()
-            .where("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
-            .orWhere("LOWER(description) LIKE :q", { q: `%${q.toLowerCase()}%` })
-            .limit(first)
-            .offset(after)
-            .orderBy("name")
-            .getMany();
+    public async search(q: string, first: number, after: number, sellerId: number): Promise<Paginate<Product>> {
+        let result;
+        let total;
 
-        const total = await this.count();
+        if (sellerId) {
+            result = await this.createQueryBuilder()
+                .where({ sellerId: sellerId })
+                .andWhere("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
+                .orWhere("LOWER(description) LIKE :q", { q: `%${q.toLowerCase()}%` })
+                .limit(first)
+                .offset(after)
+                .orderBy("name")
+                .getMany();
+
+            total = await this.count({ sellerId: sellerId });
+        } else {
+            result = await this.createQueryBuilder()
+                .where("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
+                .orWhere("LOWER(description) LIKE :q", { q: `%${q.toLowerCase()}%` })
+                .limit(first)
+                .offset(after)
+                .orderBy("name")
+                .getMany();
+
+            total = await this.count();
+        }
 
         return new Paginate(result, total);
 

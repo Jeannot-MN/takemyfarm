@@ -17,8 +17,11 @@ export class ProductQueryResolver {
     }
 
     @Query(() => ProductPaginatedRespone)
-    async products(@Arg("q", { nullable: true }) q: string, @Arg("first", { nullable: true }) first: number, @Arg("after", { nullable: true }) after: number) {
-        const { data, total } = await this.productService.search(q || '', first || 5, after || 0);
+    async products(@Arg("q", { nullable: true }) q: string
+        , @Arg("first", { nullable: true }) first: number
+        , @Arg("after", { nullable: true }) after: number
+        ,@Arg("sellerId", {nullable: true}) sellerId: number) {
+        const { data, total } = await this.productService.search(q || '', first || 5, after || 0, sellerId);
 
         return new ProductPaginatedRespone(this.productMapper.productsToProductDTOs(data), total);
     }

@@ -31,6 +31,21 @@ export type AddressInput = {
   suburb: Scalars['String'];
 };
 
+export type CreateProductInput = {
+  category: Scalars['String'];
+  description: Scalars['String'];
+  images: Array<ProductImageInput>;
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  sellerId: Scalars['Float'];
+  videos: Array<ProductVideoInput>;
+};
+
+export type CreateProductPayload = {
+  __typename?: 'CreateProductPayload';
+  product: ProductDto;
+};
+
 export type GenerateUploadInput = {
   uploadType: Scalars['String'];
 };
@@ -55,10 +70,16 @@ export type LoginPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createProduct: CreateProductPayload;
   generateUpload: GenerateUploadPayload;
   login: LoginPayload;
   registerSeller: RegisterSellerPayload;
   registerUser: RegisterUserPayload;
+};
+
+
+export type MutationCreateProductArgs = {
+  input: CreateProductInput;
 };
 
 
@@ -93,10 +114,18 @@ export type ProductDto = {
   status: Scalars['String'];
 };
 
+export type ProductImageInput = {
+  url: Scalars['String'];
+};
+
 export type ProductPaginatedRespone = {
   __typename?: 'ProductPaginatedRespone';
   data: Array<ProductDto>;
   total: Scalars['Float'];
+};
+
+export type ProductVideoInput = {
+  url: Scalars['String'];
 };
 
 export type Query = {
@@ -117,6 +146,7 @@ export type QueryProductsArgs = {
   after?: Maybe<Scalars['Float']>;
   first?: Maybe<Scalars['Float']>;
   q?: Maybe<Scalars['String']>;
+  sellerId?: Maybe<Scalars['Float']>;
 };
 
 export type RegisterSellerInput = {
@@ -170,6 +200,13 @@ export type UserDto = {
   surname?: Maybe<Scalars['String']>;
 };
 
+export type CreateProductMutationVariables = Exact<{
+  input: CreateProductInput;
+}>;
+
+
+export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'CreateProductPayload', product: { __typename?: 'ProductDTO', id: number } } };
+
 export type GenerateUploadMutationVariables = Exact<{
   input: GenerateUploadInput;
 }>;
@@ -191,7 +228,57 @@ export type RegisterSellerMutationVariables = Exact<{
 
 export type RegisterSellerMutation = { __typename?: 'Mutation', registerSeller: { __typename?: 'RegisterSellerPayload', sellerId: number } };
 
+export type ProductByIdQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
 
+
+export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image: string, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
+
+export type ProductsQueryVariables = Exact<{
+  search: Scalars['String'];
+  sellerId: Scalars['Float'];
+}>;
+
+
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedRespone', total: number, data: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image: string, sellerId: number }> } };
+
+
+export const CreateProductDocument = gql`
+    mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    product {
+      id
+    }
+  }
+}
+    `;
+export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutation, CreateProductMutationVariables>;
+
+/**
+ * __useCreateProductMutation__
+ *
+ * To run a mutation, you first call `useCreateProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProductMutation, { data, loading, error }] = useCreateProductMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductMutation, CreateProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument, options);
+      }
+export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
+export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
+export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
 export const GenerateUploadDocument = gql`
     mutation GenerateUpload($input: GenerateUploadInput!) {
   generateUpload(input: $input) {
@@ -313,3 +400,102 @@ export function useRegisterSellerMutation(baseOptions?: Apollo.MutationHookOptio
 export type RegisterSellerMutationHookResult = ReturnType<typeof useRegisterSellerMutation>;
 export type RegisterSellerMutationResult = Apollo.MutationResult<RegisterSellerMutation>;
 export type RegisterSellerMutationOptions = Apollo.BaseMutationOptions<RegisterSellerMutation, RegisterSellerMutationVariables>;
+export const ProductByIdDocument = gql`
+    query ProductById($id: Float!) {
+  productById(id: $id) {
+    name
+    description
+    price
+    status
+    image
+    seller {
+      id
+      name
+      email
+      mobileNumber
+      bannerImage
+      status
+      address {
+        street
+        suburb
+        city
+        postCode
+        province
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductByIdQuery__
+ *
+ * To run a query within a React component, call `useProductByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProductByIdQuery(baseOptions: Apollo.QueryHookOptions<ProductByIdQuery, ProductByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductByIdQuery, ProductByIdQueryVariables>(ProductByIdDocument, options);
+      }
+export function useProductByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductByIdQuery, ProductByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductByIdQuery, ProductByIdQueryVariables>(ProductByIdDocument, options);
+        }
+export type ProductByIdQueryHookResult = ReturnType<typeof useProductByIdQuery>;
+export type ProductByIdLazyQueryHookResult = ReturnType<typeof useProductByIdLazyQuery>;
+export type ProductByIdQueryResult = Apollo.QueryResult<ProductByIdQuery, ProductByIdQueryVariables>;
+export const ProductsDocument = gql`
+    query Products($search: String!, $sellerId: Float!) {
+  products(q: $search, first: 20, sellerId: $sellerId) {
+    total
+    data {
+      id
+      name
+      description
+      price
+      status
+      image
+      sellerId
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductsQuery__
+ *
+ * To run a query within a React component, call `useProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductsQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      sellerId: // value for 'sellerId'
+ *   },
+ * });
+ */
+export function useProductsQuery(baseOptions: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
+      }
+export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
+        }
+export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
+export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
+export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;

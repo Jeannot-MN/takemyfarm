@@ -1,4 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
+import { ProductImageDTO } from "./ProductImageDTO";
+import { ProductVideoDTO } from "./ProductVideoDTO";
 
 @ObjectType()
 export class ProductDTO {
@@ -21,6 +23,10 @@ export class ProductDTO {
     @Field()
     status: string;
 
-    @Field()
+    @Field({ nullable: true})
     image: string;
+
+    images: ProductImageDTO[];
+
+    videos: ProductVideoDTO[];
 }
