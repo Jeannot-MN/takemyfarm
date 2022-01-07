@@ -28,7 +28,7 @@ export function ProductImagesCard({
   const [uploadTrying, setUploadTrying] = useState(false);
   const [open, setOpen] = React.useState(false);
 
-  const [generateUpload, { loading }] = useGenerateUploadMutation()
+  const [generateUpload, { loading }] = useGenerateUploadMutation();
 
   const tryUpload = useCallback(
     async (getUri: string, putUri: string) => {

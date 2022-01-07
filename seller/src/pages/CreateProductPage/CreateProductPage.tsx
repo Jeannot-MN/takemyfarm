@@ -1,5 +1,6 @@
 import { FormikProps } from 'formik';
 import * as React from 'react';
+import ProductVideos from '../../modules/PpoductVideoUpload/ProductVideos';
 import ProductImages from '../../modules/ProductImageUpload/ProductImages';
 import { Steps, StepState } from '../../modules/Stepper/Steps';
 import { ProductGeneralDetails } from './ProductGeneralDetails';
@@ -89,15 +90,18 @@ export const CreateProductPage = () => {
                 showEditIcon={false}
             />
 
-            <ProductGeneralDetails
-                formRef={formRefArray[1]}
+            <ProductVideos
+                formRef={formRefArray[2]}
                 progress={() => {
-                    setStepState(1, StepState.COMPLETE);
+                    setStepState(2, StepState.COMPLETE);
                     setStep(step + 1);
                 }}
                 regress={() => setStep(step - 1)}
-                values={values}
-                setParentValues={setValues}
+                values={{
+                    videos: values.videos,
+                    submitDirection: 'progress',
+                }}
+                handleSubmit={(tab3) => setValues({ ...values, videos: tab3.videos })}
             />
         </Steps>
     )

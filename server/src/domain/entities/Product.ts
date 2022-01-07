@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ProductImage } from "./ProductImage";
+import { ProductVideo } from "./ProductVideo";
 
 @Entity("product")
 export class Product {
@@ -23,4 +25,10 @@ export class Product {
 
     @Column()
     image: string;
+
+    @OneToMany(() => ProductImage, image => image.product, { eager: true, cascade: true })
+    images: [];
+
+    @OneToMany(() => ProductVideo, video => video.product, { eager: true, cascade: true })
+    videos: [];
 }

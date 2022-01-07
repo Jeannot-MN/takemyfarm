@@ -25,6 +25,7 @@ export interface ProductImagesTab {
 
 export interface ProductVideosTab{
     videos: ProductVideo[];
+    submitDirection: 'progress' | 'regress';
 }
 
 export interface ProductProps {
