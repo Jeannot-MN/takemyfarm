@@ -14,6 +14,9 @@ export class ProductMapper {
         target.image = source.image;
         target.sellerId = source.sellerId;
         target.status = source.status;
+        target.category = source.category;
+        target.images = source.images;
+        target.videos = source.videos;
 
         return target;
     }

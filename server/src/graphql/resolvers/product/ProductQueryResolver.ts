@@ -22,6 +22,8 @@ export class ProductQueryResolver {
         , @Arg("after", { nullable: true }) after: number
         ,@Arg("sellerId", {nullable: true}) sellerId: number) {
         const { data, total } = await this.productService.search(q || '', first || 5, after || 0, sellerId);
+        console.log(data);
+        
 
         return new ProductPaginatedRespone(this.productMapper.productsToProductDTOs(data), total);
     }

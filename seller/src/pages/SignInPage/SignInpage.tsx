@@ -22,9 +22,9 @@ export function SignInPage() {
     React.useEffect(() => {
         if (auth.authenticated) {
             if (hasRole(Role.ADMIN)) {
-                navigate('/');
+                navigate('/products');
             } else {
-                navigate('/');
+                navigate('/products');
             }
         }
     }, [navigate, auth.authenticated, hasRole]);
@@ -42,7 +42,7 @@ export function SignInPage() {
                         console.log(loginResponse);
 
                         if (loginResponse && loginResponse.data.login.token) {
-                            navigate('/');
+                            navigate('/products');
                         }
                     } catch (error: any) {
                         Toast('error', error.message);

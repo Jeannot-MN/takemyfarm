@@ -104,9 +104,10 @@ export type MutationRegisterUserArgs = {
 
 export type ProductDto = {
   __typename?: 'ProductDTO';
+  category?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   id: Scalars['Float'];
-  image: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   price: Scalars['Float'];
   seller: SellerDto;
@@ -233,7 +234,7 @@ export type ProductByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image: string, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
+export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image?: Maybe<string>, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
 
 export type ProductsQueryVariables = Exact<{
   search: Scalars['String'];
@@ -241,7 +242,7 @@ export type ProductsQueryVariables = Exact<{
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedRespone', total: number, data: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image: string, sellerId: number }> } };
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedRespone', total: number, data: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image?: Maybe<string>, sellerId: number, category?: Maybe<string> }> } };
 
 
 export const CreateProductDocument = gql`
@@ -466,6 +467,7 @@ export const ProductsDocument = gql`
       status
       image
       sellerId
+      category
     }
   }
 }

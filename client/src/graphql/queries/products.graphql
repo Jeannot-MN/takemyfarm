@@ -9,6 +9,9 @@ query Products( $search: String!) {
             status
             image
             sellerId
+            images {
+                url
+            }
         }
     }
 }

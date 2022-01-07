@@ -16,9 +16,10 @@ export class ProductRepository extends Repository<Product>{
     }
 
     public queryAll(q: string) {
-        return this.createQueryBuilder()
-            .where("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
-            .orWhere("LOWER(description) LIKE :q", { q: `%${q.toLowerCase()}%` })
+        return this.createQueryBuilder("product")
+            .where("(LOWER(name) LIKE :q OR LOWER(description) LIKE :q)", { q: `%${q.toLowerCase()}%` })
+            .leftJoinAndSelect("product.images", "image")
+            .leftJoinAndSelect("product.videos", "video")
             .getMany();
     }
 
@@ -27,23 +28,25 @@ export class ProductRepository extends Repository<Product>{
         let total;
 
         if (sellerId) {
-            result = await this.createQueryBuilder()
+            result = await this.createQueryBuilder("product")
                 .where({ sellerId: sellerId })
-                .andWhere("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
-                .orWhere("LOWER(description) LIKE :q", { q: `%${q.toLowerCase()}%` })
+                .andWhere("(LOWER(name) LIKE :q OR LOWER(description) LIKE :q)", { q: `%${q.toLowerCase()}%` })
                 .limit(first)
                 .offset(after)
                 .orderBy("name")
+                .leftJoinAndSelect("product.images", "image")
+                .leftJoinAndSelect("product.videos", "video")
                 .getMany();
 
             total = await this.count({ sellerId: sellerId });
         } else {
-            result = await this.createQueryBuilder()
-                .where("LOWER(name) LIKE :q", { q: `%${q.toLowerCase()}%` })
-                .orWhere("LOWER(description) LIKE :q", { q: `%${q.toLowerCase()}%` })
+            result = await this.createQueryBuilder("product")
+                .where("(LOWER(name) LIKE :q OR LOWER(description) LIKE :q)", { q: `%${q.toLowerCase()}%` })
                 .limit(first)
                 .offset(after)
                 .orderBy("name")
+                .leftJoinAndSelect("product.images", "image")
+                .leftJoinAndSelect("product.videos", "video")
                 .getMany();
 
             total = await this.count();

@@ -5,6 +5,9 @@ query ProductById( $id: Float!) {
         price
         status
         image
+        images {
+            url
+        }
         seller {
             id
             name

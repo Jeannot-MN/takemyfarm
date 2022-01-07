@@ -37,7 +37,7 @@ export function ProductPage(){
                             style={{
                                 width: '100%',
                                 height: '100%',
-                                backgroundImage: `url(${data?.productById.image})`,
+                                backgroundImage: `url(${data?.productById.images[0].url || ''})`,
                                 backgroundSize: "cover",
                                 borderRadius: "25px"
                             }}

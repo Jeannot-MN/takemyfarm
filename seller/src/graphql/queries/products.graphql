@@ -9,6 +9,7 @@ query Products( $search: String!, $sellerId: Float!) {
             status
             image
             sellerId
+            category
         }
     }
 }

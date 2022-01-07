@@ -14,6 +14,49 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddressDto = {
+  __typename?: 'AddressDTO';
+  city: Scalars['String'];
+  postCode: Scalars['String'];
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  suburb: Scalars['String'];
+};
+
+export type AddressInput = {
+  city: Scalars['String'];
+  postCode: Scalars['String'];
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  suburb: Scalars['String'];
+};
+
+export type CreateProductInput = {
+  category: Scalars['String'];
+  description: Scalars['String'];
+  images: Array<ProductImageInput>;
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  sellerId: Scalars['Float'];
+  videos: Array<ProductVideoInput>;
+};
+
+export type CreateProductPayload = {
+  __typename?: 'CreateProductPayload';
+  product: ProductDto;
+};
+
+export type GenerateUploadInput = {
+  uploadType: Scalars['String'];
+};
+
+export type GenerateUploadPayload = {
+  __typename?: 'GenerateUploadPayload';
+  getUri: Scalars['String'];
+  key: Scalars['String'];
+  putUri: Scalars['String'];
+};
+
 export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -27,13 +70,31 @@ export type LoginPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createProduct: CreateProductPayload;
+  generateUpload: GenerateUploadPayload;
   login: LoginPayload;
+  registerSeller: RegisterSellerPayload;
   registerUser: RegisterUserPayload;
+};
+
+
+export type MutationCreateProductArgs = {
+  input: CreateProductInput;
+};
+
+
+export type MutationGenerateUploadArgs = {
+  input: GenerateUploadInput;
 };
 
 
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+export type MutationRegisterSellerArgs = {
+  input: RegisterSellerInput;
 };
 
 
@@ -43,20 +104,41 @@ export type MutationRegisterUserArgs = {
 
 export type ProductDto = {
   __typename?: 'ProductDTO';
+  category?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   id: Scalars['Float'];
-  image: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
+  images: Array<ProductImageDto>;
   name: Scalars['String'];
   price: Scalars['Float'];
   seller: SellerDto;
   sellerId: Scalars['Float'];
   status: Scalars['String'];
+  videos: Array<ProductVideoDto>;
+};
+
+export type ProductImageDto = {
+  __typename?: 'ProductImageDTO';
+  url: Scalars['String'];
+};
+
+export type ProductImageInput = {
+  url: Scalars['String'];
 };
 
 export type ProductPaginatedRespone = {
   __typename?: 'ProductPaginatedRespone';
   data: Array<ProductDto>;
   total: Scalars['Float'];
+};
+
+export type ProductVideoDto = {
+  __typename?: 'ProductVideoDTO';
+  url: Scalars['String'];
+};
+
+export type ProductVideoInput = {
+  url: Scalars['String'];
 };
 
 export type Query = {
@@ -77,6 +159,21 @@ export type QueryProductsArgs = {
   after?: Maybe<Scalars['Float']>;
   first?: Maybe<Scalars['Float']>;
   q?: Maybe<Scalars['String']>;
+  sellerId?: Maybe<Scalars['Float']>;
+};
+
+export type RegisterSellerInput = {
+  address: AddressInput;
+  description: Scalars['String'];
+  email: Scalars['String'];
+  mobileNumber: Scalars['String'];
+  name: Scalars['String'];
+  user: RegisterUserInput;
+};
+
+export type RegisterSellerPayload = {
+  __typename?: 'RegisterSellerPayload';
+  sellerId: Scalars['Float'];
 };
 
 export type RegisterUserInput = {
@@ -95,7 +192,9 @@ export type RegisterUserPayload = {
 
 export type SellerDto = {
   __typename?: 'SellerDTO';
-  bannerImage: Scalars['String'];
+  address: AddressDto;
+  bannerImage?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Float'];
   mobileNumber: Scalars['String'];
@@ -110,6 +209,7 @@ export type UserDto = {
   mobileNumber?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   profileImageUri?: Maybe<Scalars['String']>;
+  seller?: Maybe<SellerDto>;
   surname?: Maybe<Scalars['String']>;
 };
 
@@ -134,14 +234,14 @@ export type ProductByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image: string, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage: string, status: string } } };
+export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image?: Maybe<string>, images: Array<{ __typename?: 'ProductImageDTO', url: string }>, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
 
 export type ProductsQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedRespone', total: number, data: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image: string, sellerId: number }> } };
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedRespone', total: number, data: Array<{ __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, image?: Maybe<string>, sellerId: number, images: Array<{ __typename?: 'ProductImageDTO', url: string }> }> } };
 
 export const Header_UserInformationFragmentDoc = gql`
     fragment Header_userInformation on UserDTO {
@@ -234,6 +334,9 @@ export const ProductByIdDocument = gql`
     price
     status
     image
+    images {
+      url
+    }
     seller {
       id
       name
@@ -241,6 +344,13 @@ export const ProductByIdDocument = gql`
       mobileNumber
       bannerImage
       status
+      address {
+        street
+        suburb
+        city
+        postCode
+        province
+      }
     }
   }
 }
@@ -285,6 +395,9 @@ export const ProductsDocument = gql`
       status
       image
       sellerId
+      images {
+        url
+      }
     }
   }
 }

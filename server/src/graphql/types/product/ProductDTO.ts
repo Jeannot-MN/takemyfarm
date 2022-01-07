@@ -23,10 +23,15 @@ export class ProductDTO {
     @Field()
     status: string;
 
-    @Field({ nullable: true})
+    @Field({ nullable: true })
     image: string;
 
+    @Field({ nullable: true })
+    category: string;
+
+    @Field(() => [ProductImageDTO])
     images: ProductImageDTO[];
 
+    @Field(() => [ProductVideoDTO])
     videos: ProductVideoDTO[];
 }

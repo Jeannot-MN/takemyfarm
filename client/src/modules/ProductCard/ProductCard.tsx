@@ -26,7 +26,7 @@ function ProductCard(props: Props) {
         >
             <Box className={classes.imageContainer}>
                 <img
-                    src={product.image}
+                    src={product.images[0].url || ''}
                     alt={product.name}
                     className={classes.image}
                 />

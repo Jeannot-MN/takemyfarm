@@ -10,11 +10,23 @@ export const ProductsPage = () => {
 
     const { seller } = React.useContext(SellerContext);
     const { loading, data, refetch } = useProductsQuery({
-        variables:{
+        variables: {
             search: '',
             sellerId: seller?.id || 0
         }
     });
+
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [page, setPage] = React.useState(0);
+
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    //TODO: after: rowsPerPage * page - 1
 
     const [searchValue, setSearchValue] = React.useState<string>('');
 
@@ -64,7 +76,7 @@ export const ProductsPage = () => {
                             <Box display="flex" width="100%" justifyContent="flex-end">
                                 <Button
                                     color="primary"
-                                    onClick={async () => { 
+                                    onClick={async () => {
                                         navigate("/newProduct");
                                     }}
                                 >
@@ -117,44 +129,55 @@ export const ProductsPage = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell>
-                                        <Typography noWrap className={globalClasses.TableBodyText}>
-                                            60015421
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography noWrap className={globalClasses.TableBodyText}>
-                                            VIN123451
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography noWrap className={globalClasses.TableBodyText}>
-                                            2017
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography noWrap className={globalClasses.TableBodyText}>
-                                            15400
-                                        </Typography>
-                                    </TableCell>
+                                {data?.products.data.map((product, index) => {
+                                    return (
+                                        <TableRow
+                                            key={index}
+                                            className={index % 2 !== 0 ? globalClasses.OddTableRow : globalClasses.EvenTableRow}
+                                        >
+                                            <TableCell>
+                                                <Typography noWrap className={globalClasses.TableBodyText}>
+                                                    {product.name}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography noWrap className={globalClasses.TableBodyText}>
+                                                    {product.description}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography noWrap className={globalClasses.TableBodyText}>
+                                                    {product.price}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography noWrap className={globalClasses.TableBodyText}>
+                                                    {product.category}
+                                                </Typography>
+                                            </TableCell>
 
-                                    <TableCell>
-                                        <Typography className={globalClasses.TableBodyText}>
-                                            ACTIVE
-                                        </Typography>
-                                    </TableCell>
-                                </TableRow>
+                                            <TableCell>
+                                                <Typography className={globalClasses.TableBodyText}>
+                                                    {product.status}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}
                             </TableBody>
                         </Table>
                     </Box>
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="span"
-                        count={47}
-                        rowsPerPage={5}
-                        onPageChange={()=>{}}
-                        page={1}
+                        count={data?.products.total || 0}
+                        rowsPerPage={rowsPerPage}
+                        onPageChange={() => { }}
+                        page={page}
+                        onChangePage={(_event, pageNumber) => {
+                            setPage(pageNumber);
+                        }}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
                 </Box>
             </Box>
