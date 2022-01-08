@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Video } from '../../atoms/Video';
 import { useProductByIdQuery } from '../../generated/graphql';
+import { useYocoPopUp } from '../../hooks/yoco/useYocoScript';
 import { HeaderDivider } from '../../modules/HeaderDivider/HeaderDivider';
 import { SubHeader } from '../../modules/SubHeader/SubHeader';
 import styles from './ProductPageStyles';
@@ -17,6 +18,8 @@ export function ProductPage() {
     });
 
     const classes = styles();
+
+    const { showYocoPaymentPopUp } = useYocoPopUp("pk_test_ed3c54a6gOol69qa7f45");
 
     return (
         <Box
@@ -112,6 +115,19 @@ export function ProductPage() {
                                 <Box>
                                     <Button
                                         color="secondary"
+                                        onClick={() => {
+                                            if (data) {
+                                                showYocoPaymentPopUp({
+                                                    amountInCents: data?.productById?.price * 100,
+                                                    title: data?.productById.name,
+                                                    description: data?.productById.description,
+                                                    onTokenSuccessful: (result: any) => {
+                                                        console.log(result);
+                                                        
+                                                    }
+                                                })
+                                            }
+                                        }}
                                     >
                                         Add to wishlist
                                     </Button>
