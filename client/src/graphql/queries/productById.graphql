@@ -1,9 +1,11 @@
 query ProductById( $id: Float!) {
     productById(id: $id){
+        id
         name
         description
         price
         status
+        sellerId
         image
         images {
             url
@@ -14,6 +16,7 @@ query ProductById( $id: Float!) {
         seller {
             id
             name
+            description
             email
             mobileNumber
             bannerImage

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Typography } from '@material-ui/core';
+import { Avatar, Badge, Box, Button, Typography } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -24,10 +24,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import clsx from 'clsx';
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import TakeMyFarmLogo from '../../assets/take_my_farm.png';
 import { useAuthContext } from '../../context/AuthContext';
+import { CartContext } from '../../context/CartContext';
 import { useScreenSize } from '../../hooks/useScreenSize';
 
 const drawerWidth = 300;
@@ -124,7 +125,7 @@ export function Header() {
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useScreenSize(600);
-  const { auth , handleLogout } = useAuthContext();
+  const { auth, handleLogout } = useAuthContext();
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -146,6 +147,8 @@ export function Header() {
     // setSubSelectedIndex(0);
     handleDrawerClose();
   };
+
+  const { cart } = useContext(CartContext);
 
   return (
     <div className={classes.root}>
@@ -310,7 +313,7 @@ export function Header() {
         <Divider />
 
         {auth.authenticated ? (
-          <List style={{ height: '100%' }}>
+          <List style={{ height: '100%', marginTop: '10px' }}>
             <ListItem
               selected={selectedIndex === 2}
               button
@@ -320,7 +323,13 @@ export function Header() {
             >
               <ListItemIcon>
                 <IconButton aria-label="Cart">
-                  <ShoppingCartIcon />
+                  {cart.items.length > 0 ? (
+                    <Badge badgeContent={cart.items.length} color="secondary">
+                      <ShoppingCartIcon />
+                    </Badge>
+                  ) : (
+                    <ShoppingCartIcon />
+                  )}
                 </IconButton>
               </ListItemIcon>
               <ListItemText primary="Cart" />

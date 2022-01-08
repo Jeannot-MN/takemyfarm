@@ -1,10 +1,10 @@
 import { Box, Button, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Video } from '../../atoms/Video';
+import { CartContext } from '../../context/CartContext';
 import { useProductByIdQuery } from '../../generated/graphql';
 import { useYocoPopUp } from '../../hooks/yoco/useYocoScript';
-import { HeaderDivider } from '../../modules/HeaderDivider/HeaderDivider';
 import { SubHeader } from '../../modules/SubHeader/SubHeader';
 import styles from './ProductPageStyles';
 
@@ -20,6 +20,8 @@ export function ProductPage() {
     const classes = styles();
 
     const { showYocoPaymentPopUp } = useYocoPopUp("pk_test_ed3c54a6gOol69qa7f45");
+
+    const { cart, updateCart, addItemToCart, removeItemFromCart, itemIsInCart } = useContext(CartContext);
 
     return (
         <Box
@@ -52,16 +54,15 @@ export function ProductPage() {
                     <Box className={classes.boxAlignment}>
                         <Box>
                             <Box className={classes.productImage}>
-                                <Box
+                                <img
+                                    src={data?.productById.images[0].url || ''}
+                                    alt={data?.productById.name}
                                     style={{
                                         width: '100%',
                                         height: '100%',
-                                        backgroundImage: `url(${data?.productById.images[0].url || ''})`,
-                                        backgroundSize: "cover",
-                                        borderRadius: "25px"
+                                        objectFit: 'cover'
                                     }}
-                                >
-                                </Box>
+                                />
                             </Box>
 
                         </Box>
@@ -104,13 +105,36 @@ export function ProductPage() {
                             </Box>
 
                             <Box display="flex" flexDirection="row" mt={5}>
-                                <Box pr={5}>
-                                    <Button
-                                        color="primary"
-                                    >
-                                        Add to cart
-                                    </Button>
-                                </Box>
+                                {itemIsInCart(parseInt(productId)) ? (
+                                    <Box pr={5}>
+                                        <Button
+                                            color="primary"
+                                            onClick={() => {
+                                                if (data) {
+                                                    removeItemFromCart(parseInt(productId));
+                                                }
+                                            }}
+                                        >
+                                            Remove from cart
+                                        </Button>
+
+                                    </Box>
+                                ) : (
+                                    <Box pr={5}>
+                                        <Button
+                                            color="primary"
+                                            onClick={() => {
+                                                if (data) {
+                                                    // @ts-ignore
+                                                    addItemToCart(data?.productById);
+                                                }
+                                            }}
+                                        >
+                                            Add to cart
+                                        </Button>
+
+                                    </Box>
+                                )}
 
                                 <Box>
                                     <Button
@@ -123,7 +147,7 @@ export function ProductPage() {
                                                     description: data?.productById.description,
                                                     onTokenSuccessful: (result: any) => {
                                                         console.log(result);
-                                                        
+
                                                     }
                                                 })
                                             }
@@ -179,11 +203,12 @@ export function ProductPage() {
                                 display: 'flex',
                                 flexWrap: 'wrap',
                                 width: '100%',
-                                marginLeft: '80px'
+                                marginLeft: data.productById.videos.length > 0 ? '80px' : '0px'
                             }}>
                                 {data.productById.images.map((image, index) => {
                                     return (
                                         <Box
+                                            key={index}
                                             style={{
                                                 width: '300px',
                                                 height: '200px',

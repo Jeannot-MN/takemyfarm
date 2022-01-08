@@ -234,7 +234,7 @@ export type ProductByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', name: string, description: string, price: number, status: string, image?: Maybe<string>, images: Array<{ __typename?: 'ProductImageDTO', url: string }>, videos: Array<{ __typename?: 'ProductVideoDTO', url: string }>, seller: { __typename?: 'SellerDTO', id: number, name: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
+export type ProductByIdQuery = { __typename?: 'Query', productById: { __typename?: 'ProductDTO', id: number, name: string, description: string, price: number, status: string, sellerId: number, image?: Maybe<string>, images: Array<{ __typename?: 'ProductImageDTO', url: string }>, videos: Array<{ __typename?: 'ProductVideoDTO', url: string }>, seller: { __typename?: 'SellerDTO', id: number, name: string, description: string, email: string, mobileNumber: string, bannerImage?: Maybe<string>, status: string, address: { __typename?: 'AddressDTO', street: string, suburb: string, city: string, postCode: string, province?: Maybe<string> } } } };
 
 export type ProductsQueryVariables = Exact<{
   search: Scalars['String'];
@@ -329,10 +329,12 @@ export type RegisterUserMutationMutationOptions = Apollo.BaseMutationOptions<Reg
 export const ProductByIdDocument = gql`
     query ProductById($id: Float!) {
   productById(id: $id) {
+    id
     name
     description
     price
     status
+    sellerId
     image
     images {
       url
@@ -343,6 +345,7 @@ export const ProductByIdDocument = gql`
     seller {
       id
       name
+      description
       email
       mobileNumber
       bannerImage
