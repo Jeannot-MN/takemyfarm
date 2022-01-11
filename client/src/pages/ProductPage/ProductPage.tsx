@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Video } from '../../atoms/Video';
 import { CartContext } from '../../context/CartContext';
-import { useProductByIdQuery } from '../../generated/graphql';
+import { useCompleteOrderMutation, useProductByIdQuery } from '../../generated/graphql';
 import { useYocoPopUp } from '../../hooks/yoco/useYocoScript';
 import { SubHeader } from '../../modules/SubHeader/SubHeader';
 import styles from './ProductPageStyles';

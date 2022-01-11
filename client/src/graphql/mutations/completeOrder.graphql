@@ -1,0 +1,5 @@
+mutation CompleteOrder($input: CompleteOrderInput!){
+    completeOrder(input: $input){
+        successful
+    }
+}

@@ -5,8 +5,8 @@ import { YocoCompletePaymentRequest } from "./YocoCompletePaymentRequest";
 @Service()
 export class YocoService {
 
-    public charge(paymentRequest: YocoCompletePaymentRequest) {
-        axios
+    public async charge(paymentRequest: YocoCompletePaymentRequest) {
+        const response = await axios
             .post('https://online.yoco.com/v1/charges/'
                 , {
                     token: paymentRequest.token,
@@ -18,14 +18,9 @@ export class YocoService {
                         'X-Auth-Secret-Key': 'sk_test_bf631e0234rNaW6963b46dc89357',
                     }
                 }
-            )
-            .then(res => {
-                // res.status will contain the HTTP status code
-                // res.data will contain the response body
-                return res;
-            })
-            .catch(error => {
-                throw Error(error.message)
-            })
+            );
+
+        return response;
+
     }
 }

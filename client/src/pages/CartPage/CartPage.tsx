@@ -1,16 +1,27 @@
 import { Box, Button, Typography } from "@material-ui/core";
 import * as React from 'react';
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 import { CartContext } from "../../context/CartContext";
+import { OrderItemInput, useCompleteOrderMutation } from "../../generated/graphql";
 import { useYocoPopUp } from "../../hooks/yoco/useYocoScript";
+import { Toast } from "../../modules/Toast/Toast";
 import { CartItem } from "./CartItem";
 
 export const CartPage = () => {
 
-    const { cart, addItemToCart, removeItemFromCart, decrementItemQuantity } = React.useContext(CartContext);
+    const { cart, updateCart, addItemToCart, removeItemFromCart, decrementItemQuantity } = React.useContext(CartContext);
 
     const [totalAmount, setTotalAmount] = React.useState(0);
 
-    const { showYocoPaymentPopUp } = useYocoPopUp("pk_test_ed3c54a6gOol69qa7f45");
+    const { showYocoPaymentPopUp } = useYocoPopUp("pk_test_8639185aRmMJEXVbf4d4");
+
+    const [completeOrder, { loading }] = useCompleteOrderMutation();
+
+    const { auth } = useAuthContext();
+
+    const navigate = useNavigate();
+
 
     React.useEffect(() => {
         if (cart) {
@@ -88,39 +99,84 @@ export const CartPage = () => {
                             <Typography>Your  cart is currently empty...</Typography>
                         </Box>
                     )}
+                    {cart.items.length > 0 && (
+                        <Box
+                            width="100%"
+                            display="flex"
+                            justifyContent="end"
+                            mt={-3}
+                        >
+                            <Box>
+                                <Button
+                                    variant="outlined"
+                                    style={{
+                                        backgroundColor: '#276552',
+                                        color: '#FFFFFF',
+                                        fontWeight: 'bold',
+                                        borderRadius: '0',
+                                        padding: '0 4px',
+                                    }}
+                                    disabled={loading}
+                                    onClick={() => {
+                                        showYocoPaymentPopUp({
+                                            amountInCents: totalAmount * 100,
+                                            title: 'Complete your payment',
+                                            description: '',
+                                            onTokenSuccessful: async (result: any) => {
+                                                const items: OrderItemInput[] = cart.items.map(item => {
+                                                    return {
+                                                        productId: item.product.id,
+                                                        quantity: item.quantity
+                                                    }
+                                                })
+                                                try {
+                                                    const response = await completeOrder({
+                                                        variables: {
+                                                            input: {
+                                                                userId: auth.authenticated ? auth.user.id : 0,
+                                                                paymentToken: result.id,
+                                                                items: items,
+                                                                totalAmountInCents: totalAmount * 100
+                                                            }
+                                                        }
+                                                    })
+
+                                                    if (response.data?.completeOrder.successful) {
+                                                        Toast('success', "Your order was completed");
+                                                        updateCart({ items: [] });
+                                                        navigate('/');
+                                                    }
+                                                } catch (e: any) {
+                                                    Toast('error', e.message);
+                                                }
+                                            }
+                                        })
+                                    }}
+                                >
+                                    PAY {`(R ${totalAmount})`}
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
+
                     <Box
+                        mt={2}
                         width="100%"
                         display="flex"
-                        justifyContent="end"
-                        mt={-3}
-                        style={{
-
-                        }}
+                        alignItems="center"
                     >
-                        <Box>
-                            <Button
-                                variant="outlined"
-                                style={{
-                                    backgroundColor: '#276552',
-                                    color: '#FFFFFF',
-                                    fontWeight: 'bold',
-                                    borderRadius: '0',
-                                    padding: '0 4px',
-                                }}
-                                onClick={() => {
-                                    showYocoPaymentPopUp({
-                                        amountInCents: totalAmount * 100,
-                                        title: 'Complete your payment',
-                                        description: '',
-                                        onTokenSuccessful: (result: any) => {
-                                            console.log(result);
-                                        }
-                                    })
-                                }}
-                            >
-                                PAY {`(R ${totalAmount})`}
-                            </Button>
-                        </Box>
+                        <Button
+                            variant="text"
+                            style={{
+                                color: '#276552',
+                                fontWeight: 'bold',
+                            }}
+                            onClick={() => {
+                                navigate('/');
+                            }}
+                        >
+                            Browse for products...
+                        </Button>
                     </Box>
                 </Box>
             </Box>

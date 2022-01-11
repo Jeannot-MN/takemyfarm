@@ -8,10 +8,10 @@ export class Order {
     id: number;
 
     @Column()
-    sellerId: number;
+    userId: number;
 
     @Column()
-    userId: number;
+    totalAmount: number;
 
     @OneToMany(() => OrderItem, item => item.order, { eager: true, cascade: true })
     items: OrderItem[];

@@ -8,9 +8,6 @@ export class OrderItem {
     id: number;
 
     @Column()
-    orderId: number;
-
-    @Column()
     productId: number;
 
     @Column()

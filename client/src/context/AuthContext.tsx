@@ -19,7 +19,7 @@ export function AuthContextProvider({ children }: Props) {
 
     const [auth, setAuth] = useState<AuthContextType | undefined>(() => {
         console.log(localAuth);
-        
+
         authTokenLoaded.current = true;
         return localAuth;
     });
@@ -39,7 +39,7 @@ export function AuthContextProvider({ children }: Props) {
                         }
                     }
                 })
-                
+
                 if (result && result.data) {
                     const token = result.data.login.token;
 
@@ -56,7 +56,8 @@ export function AuthContextProvider({ children }: Props) {
                             ? parseRoles(decoded.roles)
                             : [Role.UNKNOWN],
                         expiration: decoded.exp,
-                        user: { 
+                        user: {
+                            id: result.data.login.user.id,
                             name: result.data.login.user.name,
                             profileImageUri: result.data.login.user.profileImageUri || ''
                         }
@@ -100,11 +101,11 @@ export function AuthContextProvider({ children }: Props) {
         let innerAuth: AuthContextType | undefined = { authenticated: false };
 
         if (localAuth !== null) {
-            if(localAuth?.authenticated && localAuth?.expiration * 1000 < Date.now()) {
+            if (localAuth?.authenticated && localAuth?.expiration * 1000 < Date.now()) {
                 handleLogout();
                 loggingOut.current = false;
             }
-            
+
             innerAuth = localAuth;
 
             setAuth(innerAuth);
@@ -149,6 +150,7 @@ interface RoleProps {
 }
 
 interface UserProps {
+    id: number;
     name: string;
     profileImageUri: string;
 }

@@ -5,12 +5,9 @@ import { OrderItemInput } from "./OrderItemInput";
 export class CompleteOrderInput {
 
     @Field()
-    sellerId: number;
-
-    @Field()
     userId: number;
 
-    @Field(() => OrderItemInput)
+    @Field(() => [OrderItemInput])
     items: OrderItemInput[]
 
     @Field()
