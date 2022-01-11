@@ -19,7 +19,7 @@ export function ProductPage() {
 
     const classes = styles();
 
-    const { showYocoPaymentPopUp } = useYocoPopUp("pk_test_ed3c54a6gOol69qa7f45");
+    const { showYocoPaymentPopUp } = useYocoPopUp("pk_test_8639185aRmMJEXVbf4d4");
 
     const { cart, updateCart, addItemToCart, removeItemFromCart, itemIsInCart } = useContext(CartContext);
 

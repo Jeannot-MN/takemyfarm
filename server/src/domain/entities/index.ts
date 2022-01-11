@@ -1,5 +1,7 @@
 import { NonEmptyArray } from "type-graphql";
 import { Address } from "./Address";
+import { Order } from "./Order";
+import { OrderItem } from "./OrderItem";
 import { Product } from "./Product";
 import { ProductImage } from "./ProductImage";
 import { ProductVideo } from "./ProductVideo";
@@ -18,5 +20,7 @@ export const Entities: NonEmptyArray<Function> = [
     Address,
     SellerUser,
     ProductImage,
-    ProductVideo
+    ProductVideo,
+    Order,
+    OrderItem
 ]

@@ -27,10 +27,12 @@
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.3.1",
+    "@types/axios": "^0.14.0",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/minio": "^7.0.11",
     "apollo-server-express": "^3.1.2",
     "argon2": "^0.28.2",
+    "axios": "^0.24.0",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
     "grunt": "^1.4.1",
