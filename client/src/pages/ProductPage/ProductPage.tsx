@@ -102,6 +102,10 @@ export function ProductPage() {
                                 <Typography className={classes.description}>
                                     Email: {data?.productById.seller.email}
                                 </Typography>
+
+                                <Typography className={classes.description}>
+                                    Address: {`${data?.productById.seller.address.street} ${data?.productById.seller.address.suburb} ${data?.productById.seller.address.city}`}
+                                </Typography>
                             </Box>
 
                             <Box display="flex" flexDirection="row" mt={5}>

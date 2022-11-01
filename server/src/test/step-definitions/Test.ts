@@ -16,15 +16,15 @@ export class BankAccountSteps {
   }
 
   @then(/The bank account balance should be (\d*)/)
-  public accountBalanceShouldEqual(expectedAmount: number) {
+  public async accountBalanceShouldEqual(expectedAmount: number) {
     
     const fetch = require('node-fetch');
 
     const port = process.env.PORT;
     console.log(port);
     //@ts-ignore
-    const res = fetch("http://localhost:"+port).then((res) => {
-      console.log(res);
+    const res = fetch("http://localhost:"+port).then(async (res) => {
+      console.log((await res.json()));
       
     })
 
